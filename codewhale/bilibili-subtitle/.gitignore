@@ -1,0 +1,6 @@
+# 敏感文件
+url.txt
+sessdata.txt
+cookies.txt
+subtitles/
+**/__pycache__/
