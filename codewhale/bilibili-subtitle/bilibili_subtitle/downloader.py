@@ -270,9 +270,14 @@ def _format_items(
 def _warn_no_subtitle(cookie: str | None) -> None:
     """打印无可用字幕的警告信息。"""
     if cookie:
-        print("   ⚠️  该分P没有可用字幕")
+        print(
+            "   ⚠️  该分P没有可用字幕"
+            "（已使用 cookie，但字幕列表为空。SESSDATA 可能已过期、格式不对，"
+            "或该视频本身无字幕）"
+        )
     else:
         print(
             "   ⚠️  该分P没有可用字幕"
-            "（许多视频需要登录态才能获取字幕，请用 -c 提供 SESSDATA cookie）"
+            "（许多视频需要登录态才能获取字幕，请用 -c 提供 SESSDATA，"
+            "或用 -C 指定存放 SESSDATA 的文件）"
         )

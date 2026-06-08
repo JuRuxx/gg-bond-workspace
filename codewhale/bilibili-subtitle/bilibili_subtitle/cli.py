@@ -168,9 +168,8 @@ def main(argv: list[str] | None = None) -> None:
         sys.exit(1)
 
     # Cookie
-    cookie = args.cookie
     if args.cookie_file:
-        cookie = _read_first_line(args.cookie_file, "Cookie")
+        args.cookie = _read_first_line(args.cookie_file, "Cookie")
 
     language_filter = build_language_filter(args.lang)
 
