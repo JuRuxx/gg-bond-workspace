@@ -4,3 +4,7 @@ sessdata.txt
 cookies.txt
 subtitles/
 **/__pycache__/
+
+# macOS
+.DS_Store
+**/.DS_Store
