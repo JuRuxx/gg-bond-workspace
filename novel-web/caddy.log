@@ -1,0 +1,3 @@
+{"level":"info","ts":1779864688.2255208,"msg":"maxprocs: Leaving GOMAXPROCS=10: CPU quota undefined"}
+{"level":"info","ts":1779864688.2255628,"msg":"GOMEMLIMIT is updated","GOMEMLIMIT":15461882265,"previous":9223372036854775807}
+Error: reading config from file: open /Users/a1/.openclaw/workspace/novel-web/Caddyfile: no such file or directory

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>计算你的语言</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Noto Sans SC','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#0a0a0f;
+      color:#e0e0e0;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+    .header{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:100;
+      padding:16px 32px;
+      background:rgba(10,10,15,0.85);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(124,58,237,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .logo{
+      font-size:20px;
+      font-weight:700;
+      color:#7c3aed;
+      letter-spacing:1px;
+    }
+    .logo span{color:#e0e0e0;font-weight:400}
+    .header-nav{display:flex;gap:24px}
+    .header-nav a{
+      color:#888;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+      transition:color .3s;
+    }
+    .header-nav a:hover{color:#7c3aed}
+    .header-nav a.active{color:#7c3aed;font-weight:600}
+    .main{flex:1;padding-top:72px}
+    .hero{
+      min-height:60vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:80px 24px 60px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:'';
+      position:absolute;
+      top:-50%;left:-50%;
+      width:200%;height:200%;
+      background:radial-gradient(ellipse at 30% 40%, rgba(124,58,237,0.04) 0%, transparent 60%),
+                 radial-gradient(ellipse at 70% 60%, rgba(59,130,246,0.03) 0%, transparent 50%);
+      pointer-events:none;
+    }
+    .hero-content{position:relative;z-index:1;max-width:800px}
+    .hero-icon{font-size:56px;margin-bottom:20px}
+    .hero-title{
+      font-size:clamp(28px,5vw,48px);
+      font-weight:900;
+      color:#fff;
+      line-height:1.25;
+      margin-bottom:16px;
+      letter-spacing:-0.01em;
+    }
+    .hero-title .accent{color:#7c3aed}
+    .hero-sub{
+      font-size:clamp(15px,2vw,19px);
+      color:#888;
+      line-height:1.7;
+      font-weight:400;
+      max-width:650px;
+      margin:0 auto;
+    }
+    .hero-byline{
+      margin-top:24px;
+      font-size:14px;
+      color:#666;
+      font-weight:300;
+    }
+    .section{
+      max-width:1100px;
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+    .section-label{
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:3px;
+      color:#555;
+      margin-bottom:32px;
+    }
+    .cards-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:24px;
+    }
+    .card{
+      background:#14141e;
+      border-radius:16px;
+      padding:40px 36px;
+      position:relative;
+      cursor:pointer;
+      transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease;
+      border:1px solid rgba(255,255,255,0.04);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .card::before{
+      content:'';
+      position:absolute;
+      top:0;left:0;right:0;
+      height:3px;
+      border-radius:16px 16px 0 0;
+    }
+    .card-01::before{background:linear-gradient(90deg,#7c3aed,#6366f1)}
+    .card-02::before{background:linear-gradient(90deg,#6366f1,#3b82f6)}
+    .card-03::before{background:linear-gradient(90deg,#3b82f6,#06b6d4)}
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 60px rgba(0,0,0,0.5);
+      border-color:rgba(255,255,255,0.08);
+    }
+    .card-link{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      border-radius:16px;
+    }
+    .card-num{font-size:12px;font-weight:700;letter-spacing:2px;margin-bottom:8px}
+    .card-01 .card-num{color:#7c3aed}
+    .card-02 .card-num{color:#3b82f6}
+    .card-03 .card-num{color:#06b6d4}
+    .card-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:6px;letter-spacing:-0.01em}
+    .card-author{font-size:13px;color:#666;margin-bottom:12px}
+    .card-desc{
+      font-size:15px;
+      color:#777;
+      line-height:1.7;
+      margin-bottom:24px;
+      flex:1;
+    }
+    .card-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:10px 24px;
+      border-radius:8px;
+      font-size:14px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all .25s ease;
+      text-decoration:none;
+      position:relative;
+      z-index:3;
+      align-self:flex-start;
+    }
+    .card-btn .arrow{transition:transform .25s ease;display:inline-block}
+    .card:hover .card-btn .arrow{transform:translateX(4px)}
+    .card-01 .card-btn{border:1px solid #7c3aed;color:#7c3aed;background:transparent}
+    .card-01 .card-btn:hover{background:#7c3aed;color:#0a0a0f}
+    .card-02 .card-btn{border:1px solid #3b82f6;color:#3b82f6;background:transparent}
+    .card-02 .card-btn:hover{background:#3b82f6;color:#0a0a0f}
+    .card-03 .card-btn{border:1px solid #06b6d4;color:#06b6d4;background:transparent}
+    .card-03 .card-btn:hover{background:#06b6d4;color:#0a0a0f}
+    .start-cta{text-align:center;margin:48px 0 64px}
+    .btn-start{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:16px 40px;
+      border-radius:12px;
+      font-size:17px;
+      font-weight:700;
+      font-family:inherit;
+      border:2px solid #7c3aed;
+      color:#7c3aed;
+      background:transparent;
+      cursor:pointer;
+      text-decoration:none;
+      transition:all .3s cubic-bezier(.22,1,.36,1);
+    }
+    .btn-start:hover{
+      background:#7c3aed;
+      color:#0a0a0f;
+      transform:translateY(-2px);
+      box-shadow:0 12px 40px rgba(124,58,237,0.15);
+    }
+    .footer{
+      border-top:1px solid rgba(255,255,255,0.04);
+      padding:28px 32px;
+      text-align:center;
+      font-size:13px;
+      color:#555;
+    }
+    .footer a{color:#666;text-decoration:none;transition:color .3s}
+    .footer a:hover{color:#7c3aed}
+    @media(max-width:900px){.cards-grid{grid-template-columns:1fr}}
+    @media(max-width:768px){
+      .header{padding:14px 20px}
+      .hero{padding:60px 20px 40px;min-height:50vh}
+      .card{padding:32px 24px}
+    }
+    @media(max-width:400px){
+      .header-nav{display:none}
+      .hero-title{font-size:24px}
+      .card{padding:24px 20px}
+      .card-title{font-size:18px}
+    }
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:#0a0a0f}
+    ::-webkit-scrollbar-thumb{background:#222;border-radius:3px}
+    ::-webkit-scrollbar-thumb:hover{background:#333}
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">📝 <span>计算你的语言</span></div>
+  <nav class="header-nav">
+    <a href="/">首页</a>
+    <a href="/计算你的语言/" class="active">本书</a>
+    <a href="/common/reader.html?project=计算你的语言">📖 阅读器</a>
+  </nav>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-icon">📝</div>
+      <h1 class="hero-title">
+        <span class="accent">计算</span>你的语言
+      </h1>
+      <p class="hero-sub">
+        你以为你在说话？你在做计算。<br>
+        阅读、思考、表达、演讲、辩论、说服——<br>
+        一切文字活动，都是在语义空间中的运算。
+      </p>
+      <p class="hero-byline">—— 猪猪侠 · 2026</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">✦ 章节</div>
+    <div class="cards-grid">
+      <!-- 三部: 阅读·思考·表达 -->
+      <article class="card card-01">
+        <a href="/common/reader.html?project=计算你的语言&chapter=0" class="card-link" aria-label="从引言开始阅读"></a>
+        <div class="card-num">开篇</div>
+        <div class="card-title">从输入到输出</div>
+        <div class="card-author">by 猪猪侠</div>
+        <p class="card-desc">
+          从 word2vec 词向量的经典等式出发，揭示文字的本质是计算。<br>
+          阅读=输入，思考=处理，表达=输出——<br>
+          重新理解你的每一次语言活动。
+        </p>
+        <a href="/common/reader.html?project=计算你的语言&chapter=0" class="card-btn">
+          开始阅读 <span class="arrow">→</span>
+        </a>
+      </article>
+
+      <!-- 中三部: 演讲·辩论·说服 -->
+      <article class="card card-02">
+        <a href="/common/reader.html?project=计算你的语言&chapter=4" class="card-link" aria-label="从演讲章开始阅读"></a>
+        <div class="card-num">进阶</div>
+        <div class="card-title">从影响到对抗</div>
+        <div class="card-author">by 猪猪侠</div>
+        <p class="card-desc">
+          演讲是状态迁移，辩论是边界优化，说服是参数更新。<br>
+          你以为你在沟通？你在操控语义空间。<br>
+          最高级的表达不是说话，是帮人换坐标系。
+        </p>
+        <a href="/common/reader.html?project=计算你的语言&chapter=4" class="card-btn">
+          开始阅读 <span class="arrow">→</span>
+        </a>
+      </article>
+
+      <!-- 附录 -->
+      <article class="card card-03">
+        <a href="/common/reader.html?project=计算你的语言&chapter=8" class="card-link" aria-label="查看附录速查表"></a>
+        <div class="card-num">附录</div>
+        <div class="card-title">核心模型速查</div>
+        <div class="card-author">by 猪猪侠</div>
+        <p class="card-desc">
+          全书的核心计算模型一张表看完。<br>
+          每个活动的输入输出、效率指标、关键约束、数学模型。<br>
+          附速查决策树——遇到沟通场景，三秒定位用哪个框架。
+        </p>
+        <a href="/common/reader.html?project=计算你的语言&chapter=8" class="card-btn">
+          查阅速查表 <span class="arrow">→</span>
+        </a>
+      </article>
+    </div>
+
+    <div class="start-cta">
+      <a href="/common/reader.html?project=计算你的语言&chapter=0" class="btn-start">
+        从引言开始阅读 <span class="arrow">→</span>
+      </a>
+    </div>
+
+  </section>
+</main>
+
+<footer class="footer">
+  <a href="/">猪猪侠 2026</a> · 计算你的语言
+</footer>
+
+</body>
+</html>

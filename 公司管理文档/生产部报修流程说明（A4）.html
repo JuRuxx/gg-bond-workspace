@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@page { size: A4; margin: 0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; color: #222; }
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  padding: 18mm 16mm;
+  position: relative;
+  page-break-after: always;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2.5px solid #1a5276;
+  padding-bottom: 6mm;
+  margin-bottom: 6mm;
+}
+.header h1 {
+  font-size: 20pt;
+  color: #1a5276;
+  letter-spacing: 1px;
+}
+.header .sub {
+  font-size: 9pt;
+  color: #666;
+  text-align: right;
+  line-height: 1.5;
+}
+
+.section-title {
+  font-size: 12pt;
+  font-weight: bold;
+  color: #1a5276;
+  padding: 4mm 0 2mm 0;
+}
+
+/* 表格 */
+table { width: 100%; border-collapse: collapse; font-size: 9pt; margin-bottom: 3mm; }
+th { background: #1a5276; color: #fff; text-align: center; padding: 3mm 2mm; font-weight: 600; }
+td { border: 1px solid #bbb; padding: 2.5mm 2mm; vertical-align: top; }
+tr:nth-child(even) td { background: #f6f9fc; }
+
+.label-p0 { background: #c0392b; color: #fff; padding: 1px 5px; border-radius: 2px; font-weight: bold; font-size: 8pt; }
+.label-p1 { background: #e67e22; color: #fff; padding: 1px 5px; border-radius: 2px; font-weight: bold; font-size: 8pt; }
+.label-p2 { background: #2980b9; color: #fff; padding: 1px 5px; border-radius: 2px; font-weight: bold; font-size: 8pt; }
+.label-p3 { background: #27ae60; color: #fff; padding: 1px 5px; border-radius: 2px; font-weight: bold; font-size: 8pt; }
+
+.info-box {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 3mm;
+  font-size: 9pt;
+  line-height: 1.6;
+  margin-bottom: 3mm;
+  background: #fafcfe;
+}
+.info-box h4 {
+  font-size: 9.5pt;
+  color: #1a5276;
+  margin-bottom: 2mm;
+}
+
+.template-box {
+  background: #fff;
+  border: 2px solid #1a5276;
+  border-radius: 4px;
+  padding: 4mm 5mm;
+  margin: 4mm 0;
+  font-family: 'Courier New', monospace;
+  font-size: 9pt;
+  line-height: 1.7;
+}
+
+.example-box {
+  background: #f5f8fb;
+  border: 1px solid #d4dde8;
+  border-radius: 3px;
+  padding: 3mm 4mm;
+  margin: 2.5mm 0;
+  font-family: 'Courier New', monospace;
+  font-size: 8.5pt;
+  line-height: 1.6;
+}
+
+.highlight {
+  background: #fff3cd;
+  padding: 2.5mm 3mm;
+  border-left: 3px solid #f0ad4e;
+  font-size: 9pt;
+  line-height: 1.5;
+  margin-bottom: 3mm;
+}
+
+.flex-row {
+  display: flex;
+  gap: 3mm;
+  margin-bottom: 3mm;
+}
+.flex-row > div { flex: 1; }
+
+.two-col { display: flex; gap: 3mm; margin-bottom: 3mm; }
+.two-col > div { flex: 1; }
+
+ul { margin: 1.5mm 0 1.5mm 4mm; font-size: 9pt; line-height: 1.6; }
+li { margin-bottom: 0.5mm; }
+
+.signature {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 4mm;
+  margin-top: 4mm;
+  border-top: 1.5px solid #999;
+  font-size: 9pt;
+}
+.signature div { width: 45%; }
+.signature .line { border-bottom: 1px solid #333; margin-top: 4mm; padding-bottom: 1mm; }
+
+.arrow-flow {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 3mm 0;
+  font-size: 11pt;
+  font-weight: bold;
+  color: #1a5276;
+}
+.arrow-flow span {
+  background: #eaf0f7;
+  padding: 2mm 5mm;
+  border-radius: 3px;
+}
+.arrow-flow .arrow { font-size: 14pt; color: #888; }
+
+.footer-note {
+  position: absolute;
+  bottom: 10mm;
+  left: 16mm;
+  right: 16mm;
+  font-size: 7.5pt;
+  color: #999;
+  text-align: center;
+  border-top: 1px solid #ddd;
+  padding-top: 3mm;
+}
+</style>
+</head>
+<body>
+
+<!-- ========== 第1页 ========== -->
+<div class="page">
+  <div class="header">
+    <h1>产线报修流程说明</h1>
+    <div class="sub">
+      奥普新（陆河）科技有限公司<br>
+      生产部专用
+    </div>
+  </div>
+
+  <div class="highlight" style="margin-bottom:5mm">
+    📌 设备出故障了怎么报修？看这一页就够了。<br>
+    报修统一走微信群，按模板填空，简单清楚。
+  </div>
+
+  <!-- 故障分级 -->
+  <div class="section-title">一、故障分级（先判断等级）</div>
+
+  <table>
+    <tr><th style="width:16%">等级</th><th style="width:18%">什么情况</th><th style="width:36%">怎么处理</th><th style="width:30%">技术部怎么做</th></tr>
+    <tr>
+      <td style="text-align:center"><span class="label-p0">P0 紧急</span></td>
+      <td><b>产线停下来了</b>，没法生产</td>
+      <td>直接打微信/电话找当天值班人，<b>先修后补单</b></td>
+      <td><b>15分钟内到场</b>，当天解决</td>
+    </tr>
+    <tr>
+      <td style="text-align:center"><span class="label-p1">P1 重要</span></td>
+      <td>设备能跑但<b>慢了/不稳定</b></td>
+      <td>微信群留言，技术部安排排队</td>
+      <td><b>2小时内响应</b>，当天解决</td>
+    </tr>
+    <tr>
+      <td style="text-align:center"><span class="label-p2">P2 一般</span></td>
+      <td>小问题，不影响生产</td>
+      <td>微信群留言</td>
+      <td>当天或次日处理</td>
+    </tr>
+    <tr>
+      <td style="text-align:center"><span class="label-p3">P3 计划性</span></td>
+      <td>保养、换型调试</td>
+      <td>按周计划安排</td>
+      <td>按计划排期</td>
+    </tr>
+  </table>
+
+  <div style="font-size:8.5pt; color:#666; margin-bottom:4mm">
+    ⚠️ P0-P1由生产部主管判定。如果拿不准等级，先报P1，技术部会判断调整。
+  </div>
+
+  <!-- 报修方式 -->
+  <div class="section-title">二、报修方式</div>
+
+  <p style="font-size:9pt; margin-bottom:2mm">所有报修统一发到<b>产线报修微信群</b>，按下面模板填空：</p>
+
+  <div class="template-box">
+【等级】P_<br>
+【设备】设备名称<br>
+【问题】什么故障<br>
+【机型】型号<br>
+【报修人】你的名字<br>
+【地点】哪里（如：3楼A线）<br>
+【时间】发现问题的时间
+  </div>
+
+  <p style="font-size:8.5pt; color:#555; margin-bottom:2mm">💡 复制上面模板，把 <b>P_</b> 改成 P0/P1/P2/P3，后面填内容就行。</p>
+
+  <!-- 示例 -->
+  <div class="section-title">三、填写示例</div>
+
+  <div class="flex-row">
+    <div class="info-box" style="flex:1; padding:2.5mm 3mm;">
+      <div style="font-size:8.5pt; font-weight:bold; color:#c0392b; margin-bottom:1mm">🔥 P0（停产）示例</div>
+      <div class="example-box" style="background:#fff5f0;border-color:#e8c5c0;">
+【等级】P0<br>
+【设备】三轴点胶机<br>
+【问题】主轴卡死不动，产线停线<br>
+【机型】SJ-3000<br>
+【报修人】张三<br>
+【地点】3楼A线<br>
+【时间】14:35
+      </div>
+      <div style="font-size:8pt; color:#c0392b;">→ 先打电话找值班人，修完再补填</div>
+    </div>
+    <div class="info-box" style="flex:1; padding:2.5mm 3mm;">
+      <div style="font-size:8.5pt; font-weight:bold; color:#e67e22; margin-bottom:1mm">⚡ P1（效率下降）示例</div>
+      <div class="example-box" style="background:#fef7ee;border-color:#e8d4b8;">
+【等级】P1<br>
+【设备】视觉拔磁规机<br>
+【问题】视觉识别连续3次失败，节拍变慢<br>
+【机型】VPM-200<br>
+【报修人】李四<br>
+【地点】2楼B线<br>
+【时间】09:20
+      </div>
+      <div style="font-size:8pt; color:#e67e22;">→ 群内留言，技术部当天内来</div>
+    </div>
+    <div class="info-box" style="flex:1; padding:2.5mm 3mm;">
+      <div style="font-size:8.5pt; font-weight:bold; color:#2980b9; margin-bottom:1mm">🔧 P2（一般故障）示例</div>
+      <div class="example-box" style="background:#f0f7fe;border-color:#c0d4e8;">
+【等级】P2<br>
+【设备】自动上T铁点胶机<br>
+【问题】传感器误报，重启后正常<br>
+【机型】TDM-100<br>
+【报修人】王五<br>
+【地点】4楼C线<br>
+【时间】16:00
+      </div>
+      <div style="font-size:8pt; color:#2980b9;">→ 群内留言，技术部当天或次日来</div>
+    </div>
+  </div>
+
+  <div class="footer-note">产线报修流程说明 v1.0 · 生产部专用</div>
+</div>
+
+<!-- ========== 第2页 ========== -->
+<div class="page">
+  <div class="header">
+    <h1>产线报修流程说明（续）</h1>
+    <div class="sub">奥普新（陆河）科技有限公司</div>
+  </div>
+
+  <!-- 值班信息 -->
+  <div class="section-title">四、值班安排</div>
+
+  <div class="info-box">
+    <ul>
+      <li><b>初期轮值</b>：张工、许工轮流值班</li>
+      <li><b>值班表</b>：每周发到群里，上面有当天值班人姓名和电话</li>
+      <li><b>工作日 8:00-17:30</b>：找值班工程师</li>
+      <li><b>午休 12:00-13:30</b>：只有P0才响应，其他的排队等</li>
+      <li><b>下班后/节假日</b>：只有P0才找，联系技术部主管调度</li>
+    </ul>
+  </div>
+
+  <!-- 异常升级 -->
+  <div class="section-title">五、设备修不好怎么办？—— 升级通道</div>
+
+  <div class="info-box" style="text-align:center; padding:4mm;">
+    <div style="font-size:10pt; line-height:2.2;">
+      <span style="background:#eaf0f7; padding:2mm 4mm; border-radius:3px;">值班人处理</span>
+      <span style="font-size:16pt; color:#1a5276;"> → </span>
+      <span style="background:#eaf0f7; padding:2mm 4mm; border-radius:3px;">张工</span>
+      <span style="font-size:16pt; color:#1a5276;"> → </span>
+      <span style="background:#eaf0f7; padding:2mm 4mm; border-radius:3px;">陈总（陈关保）</span>
+      <span style="font-size:16pt; color:#1a5276;"> → </span>
+      <span style="background:#eaf0f7; padding:2mm 4mm; border-radius:3px;">集团/供应商</span>
+    </div>
+  </div>
+
+  <div class="highlight">
+    ⚠️ 现场有分歧不要吵 → 先按技术部的判断做，问题留到每周开会讨论。<br>
+    不在产线上争执，不耽误生产。
+  </div>
+
+  <!-- 巡检 -->
+  <div class="section-title">六、巡检发现的问题</div>
+
+  <table>
+    <tr><th style="width:14%">等级</th><th style="width:26%">什么情况</th><th style="width:34%">怎么处理</th><th style="width:26%">向谁汇报</th></tr>
+    <tr>
+      <td style="text-align:center"><span class="label-p0">A级</span></td>
+      <td>重大隐患，必须立即处理</td>
+      <td>马上停下来找技术部</td>
+      <td><b>冯总、陈总、生产主管</b></td>
+    </tr>
+    <tr>
+      <td style="text-align:center"><span class="label-p1">B级</span></td>
+      <td>需要关注的问题</td>
+      <td>记录在微信文档表格</td>
+      <td>值班工程师</td>
+    </tr>
+    <tr>
+      <td style="text-align:center"><span class="label-p2">C级</span></td>
+      <td>小问题，提醒一下</td>
+      <td>口头告知当事人</td>
+      <td>—</td>
+    </tr>
+  </table>
+
+  <!-- 制度执行流程 -->
+  <div class="section-title">七、制度执行流程</div>
+
+  <div class="info-box">
+    <div style="display:flex; align-items:center; gap:3mm; font-size:9pt; line-height:2;">
+      <span style="background:#d4edda; padding:1.5mm 3mm; border-radius:3px;">📄 发文字稿到群</span>
+      <span style="font-size:14pt;">→</span>
+      <span style="background:#d4edda; padding:1.5mm 3mm; border-radius:3px;">👍 大家确认</span>
+      <span style="font-size:14pt;">→</span>
+      <span style="background:#d4edda; padding:1.5mm 3mm; border-radius:3px;">✅ 陈总冯总田总定稿</span>
+      <span style="font-size:14pt;">→</span>
+      <span style="background:#d4edda; padding:1.5mm 3mm; border-radius:3px;">📋 执行</span>
+    </div>
+    <div style="font-size:8pt; color:#666; margin-top:2mm;">不一致的地方后续反馈，下次会议再改。</div>
+  </div>
+
+  <!-- 考核/5S -->
+  <div class="section-title">八、其他注意事项</div>
+
+  <div class="two-col">
+    <div class="info-box">
+      <h4>📊 考核制度</h4>
+      <ul>
+        <li>天博建立考核制度</li>
+        <li>报修记录和日报作为考核参考</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h4>🧹 5S管理</h4>
+      <ul>
+        <li>各区域做好5S</li>
+        <li>电工区域重点整改</li>
+        <li>非天博设备动用需报废申请</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="info-box" style="background:#fff8e6; border-color:#e8d4a0;">
+    <h4>📌 记住三件事：</h4>
+    <ol style="font-size:9pt; line-height:1.7; margin-left:4mm;">
+      <li><b>出故障 → 群里发模板</b>（复制填空，30秒搞定）</li>
+      <li><b>P0停产 → 先打电话</b>（修完再补单子）</li>
+      <li><b>有分歧 → 别吵</b>（留到开会讨论）</li>
+    </ol>
+  </div>
+
+  <div class="signature">
+    <div>技术部主管：<div class="line"></div></div>
+    <div>生产部主管：<div class="line"></div></div>
+  </div>
+  <div style="text-align:right; margin-top:2mm">
+    <span style="font-size:8pt; color:#888">日期：____年____月____日</span>
+  </div>
+
+  <div class="footer-note">产线报修流程说明 v1.0 · 生产部专用</div>
+</div>
+
+</body>
+</html>

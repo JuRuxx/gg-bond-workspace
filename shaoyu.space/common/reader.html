@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title id="pageTitle">加载中...</title>
+<link rel="stylesheet" href="/common/reader.css">
+</head>
+<body>
+
+<!-- ===== 顶部导航 ===== -->
+<header class="topbar">
+  <div style="display:flex;align-items:center;gap:12px;min-width:0">
+    <button class="btn-menu" id="menuBtn" aria-label="菜单">☰</button>
+    <span class="topbar-title" id="topbarTitle">加载中...</span>
+  </div>
+  <div class="topbar-actions">
+    <a href="javascript:history.back()" class="btn-home">← 返回</a>
+    <a href="/" class="btn-home">🏠 首页</a>
+  </div>
+</header>
+
+<!-- ===== 侧边栏覆盖 ===== -->
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- ===== 侧边栏 ===== -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-section">📑 章节目录</div>
+  <div id="chapterList"></div>  <!-- JS动态渲染 -->
+</nav>
+
+<!-- ===== 主内容 ===== -->
+<main class="main" id="main">
+  <div class="content-wrap" id="content">
+    <div class="loading">
+      <div class="spinner"></div>
+      <div class="loading-text">加载中...</div>
+    </div>
+  </div>
+</main>
+
+<script>
+  // 从 URL 获取 project 参数
+  const params = new URLSearchParams(window.location.search);
+  const projectName = params.get('project') || 'engine';
+
+  // 加载对应 data.js
+  const script = document.createElement('script');
+  script.src = '/' + projectName + '/data.js?' + Date.now(); // 加时间戳防缓存
+  document.head.appendChild(script);
+
+  script.onload = function() {
+    // PROJECT 全局变量已就绪
+    initReader(PROJECT, parseInt(params.get('chapter')) || 0);
+  };
+
+  script.onerror = function() {
+    document.getElementById('content').innerHTML = `
+      <div class="error-msg">
+        <div class="emoji">💥</div>
+        <h2>加载失败</h2>
+        <p>无法加载项目配置: <code>/<span class="err-detail">${projectName}/data.js</span></code></p>
+        <p class="err-detail">请检查项目名称是否正确</p>
+      </div>`;
+  };
+</script>
+<script src="/common/reader.js"></script>
+</body>
+</html>

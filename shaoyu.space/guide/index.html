@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>猪猪侠AI Agent 编排指南 · 总览</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Noto Sans SC','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#0a0a0f;
+      color:#e0e0e0;
+      min-height:100vh;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    .header{
+      position:fixed;top:0;left:0;right:0;z-index:100;
+      padding:16px 32px;
+      background:rgba(10,10,15,0.85);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,107,157,0.08);
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .logo{font-size:20px;font-weight:700;color:#ff6b9d;letter-spacing:1px}
+    .logo span{color:#e0e0e0;font-weight:400}
+    .header-nav{display:flex;gap:24px}
+    .header-nav a{color:#888;text-decoration:none;font-size:14px;font-weight:500;transition:color .3s}
+    .header-nav a:hover{color:#ff6b9d}
+
+    .main{flex:1;padding-top:72px}
+
+    .hero{
+      padding:80px 24px 40px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:'';position:absolute;top:-50%;left:-50%;
+      width:200%;height:200%;
+      background:radial-gradient(ellipse at 30% 40%, rgba(255,107,157,0.05) 0%, transparent 60%);
+      pointer-events:none;
+    }
+    .hero-content{position:relative;z-index:1;max-width:720px;margin:0 auto}
+    .hero-emoji{font-size:48px;margin-bottom:16px}
+    .hero-title{
+      font-size:clamp(24px,4vw,40px);
+      font-weight:900;
+      color:#fff;
+      margin-bottom:12px;
+    }
+    .hero-sub{font-size:15px;color:#888;line-height:1.7}
+    .hero-btn{margin-top:20px}
+    .hero-btn a{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:12px 32px;border-radius:8px;
+      font-size:15px;font-weight:600;
+      border:1px solid #ff6b9d;color:#ff6b9d;
+      background:transparent;
+      text-decoration:none;
+      transition:all .25s ease;
+    }
+    .hero-btn a:hover{background:#ff6b9d;color:#0a0a0f}
+
+    .chapters-section{
+      max-width:1100px;margin:0 auto;
+      padding:0 24px 80px;
+    }
+    .section-label{font-size:13px;text-transform:uppercase;letter-spacing:3px;color:#555;margin-bottom:32px}
+
+    .chapters-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+
+    .chapter-card{
+      background:#14141e;border-radius:14px;
+      padding:28px 28px;
+      border:1px solid rgba(255,255,255,0.04);
+      transition:transform .3s cubic-bezier(.22,1,.36,1),border-color .3s;
+      display:flex;flex-direction:column;
+      position:relative;overflow:hidden;
+    }
+    .chapter-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;
+      height:2px;
+      background:linear-gradient(90deg,#ff6b9d,#ff8a65);
+      opacity:0;
+      transition:opacity .3s;
+    }
+    .chapter-card:hover{transform:translateY(-3px);border-color:rgba(255,107,157,0.1)}
+    .chapter-card:hover::before{opacity:1}
+
+    .chapter-num{
+      font-size:14px;font-weight:600;color:#ff6b9d;margin-bottom:8px;letter-spacing:2px;
+    }
+    .chapter-title{
+      font-size:19px;font-weight:700;color:#fff;margin-bottom:8px;line-height:1.4;
+    }
+    .chapter-desc{
+      font-size:14px;color:#777;line-height:1.7;flex:1;
+    }
+    .chapter-card a{
+      position:absolute;inset:0;border-radius:14px;z-index:2;
+    }
+
+    .footer{
+      border-top:1px solid rgba(255,255,255,0.04);
+      padding:28px 32px;text-align:center;
+      font-size:13px;color:#555;
+    }
+
+    @media(max-width:900px){.chapters-grid{grid-template-columns:1fr 1fr}}
+    @media(max-width:600px){
+      .chapters-grid{grid-template-columns:1fr}
+      .header{padding:14px 20px}
+      .header-nav{display:none}
+    }
+
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:#0a0a0f}
+    ::-webkit-scrollbar-thumb{background:#222;border-radius:3px}
+    ::-webkit-scrollbar-thumb:hover{background:#333}
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">猪猪侠<span> · AI作品集</span></div>
+  <nav class="header-nav">
+    <a href="/">首页</a>
+    <a href="/novel/">小说</a>
+    <a href="/tianbing-reader.html">投资分析</a>
+    <a href="/trilogy/">三部曲</a>
+    <a href="/guide/">Agent编排</a>
+    <a href="/team.html">团队</a>
+  </nav>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-emoji">🐷</div>
+      <h1 class="hero-title">猪猪侠AI Agent 编排指南</h1>
+      <p class="hero-sub">
+        十七个章节，从零搭建你的AI团队。<br>
+        不说术语，不玩概念，只有我们真刀真枪干出来的经验。
+      </p>
+      <div class="hero-btn">
+        <a href="/guide-reader.html">开始阅读 <span style="display:inline-block;transition:transform .25s">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapters-section">
+    <div class="section-label">✦ 章节列表</div>
+    <div class="chapters-grid">
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=0" aria-label="第1章"></a>
+        <div class="chapter-num">第一卷 · 入门</div>
+        <h2 class="chapter-title">01 为什么要搞AI团队？</h2>
+        <p class="chapter-desc">一个人的AI团队，为什么可以碾压十人小团队？AI不是工具，是队友。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=1" aria-label="第2章"></a>
+        <div class="chapter-num">第一卷 · 入门</div>
+        <h2 class="chapter-title">02 电脑怎么选？</h2>
+        <p class="chapter-desc">Mac mini、笔记本还是云服务器？一个配置原则搞定所有选择。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=2" aria-label="第3章"></a>
+        <div class="chapter-num">第一卷 · 入门</div>
+        <h2 class="chapter-title">03 装OpenClaw</h2>
+        <p class="chapter-desc">从零装OpenClaw，小白也能十分钟搞定。遇到权限报错别慌。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=3" aria-label="第4章"></a>
+        <div class="chapter-num">第一卷 · 入门</div>
+        <h2 class="chapter-title">04 绑定你的AI</h2>
+        <p class="chapter-desc">大模型API、飞书、配置——把你买的套餐装进你的AI。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=4" aria-label="第5章"></a>
+        <div class="chapter-num">第一卷 · 入门</div>
+        <h2 class="chapter-title">05 第一个对话</h2>
+        <p class="chapter-desc">第一次跟AI说话该说什么？不是派活，是认识彼此。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=5" aria-label="第6章"></a>
+        <div class="chapter-num">第一卷 · 入门</div>
+        <h2 class="chapter-title">06 注入灵魂</h2>
+        <p class="chapter-desc">SOUL.md——给你的AI一张人格说明书。不求无所不能，只求可预测。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=6" aria-label="第7章"></a>
+        <div class="chapter-num">第一卷 · 入门</div>
+        <h2 class="chapter-title">07 记住你是谁</h2>
+        <p class="chapter-desc">USER.md——让AI真正了解你的背景、偏好和工作方式。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=7" aria-label="第8章"></a>
+        <div class="chapter-num">第二卷 · 进阶</div>
+        <h2 class="chapter-title">08 灵魂图书馆</h2>
+        <p class="chapter-desc">四个AI队友：小呆呆、波比、超人强、迷糊老师。一个AI只能是一个角色。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=8" aria-label="第9章"></a>
+        <div class="chapter-num">第二卷 · 进阶</div>
+        <h2 class="chapter-title">09 派活四步法</h2>
+        <p class="chapter-desc">需求→规格→内容→验收。让AI产出可预期、可复制。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=9" aria-label="第10章"></a>
+        <div class="chapter-num">第二卷 · 进阶</div>
+        <h2 class="chapter-title">10 MEMORY.md妙用</h2>
+        <p class="chapter-desc">AI的"记忆"——MEMORY.md、日记、项目文件三层体系。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=10" aria-label="第11章"></a>
+        <div class="chapter-num">第二卷 · 进阶</div>
+        <h2 class="chapter-title">11 怎么写好Prompt</h2>
+        <p class="chapter-desc">从"帮我写篇文章"到给规格——好Prompt的秘密是说你想要什么。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=11" aria-label="第12章"></a>
+        <div class="chapter-num">第二卷 · 进阶</div>
+        <h2 class="chapter-title">12 多Agent协作最佳实践</h2>
+        <p class="chapter-desc">从单人全干到流水线协作，学会管你的AI团队。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=12" aria-label="第13章"></a>
+        <div class="chapter-num">第二卷 · 进阶</div>
+        <h2 class="chapter-title">13 验收的艺术</h2>
+        <p class="chapter-desc">为什么要验收？AI会偷懒、会幻觉、会漂移。没验收等于没干活。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=13" aria-label="第14章"></a>
+        <div class="chapter-num">第三卷 · 实战</div>
+        <h2 class="chapter-title">14 搭建信息雷达</h2>
+        <p class="chapter-desc">信息爆炸时代，你需要一个AI剪报员而不是信息存储器。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=14" aria-label="第15章"></a>
+        <div class="chapter-num">第三卷 · 实战</div>
+        <h2 class="chapter-title">15 AGV巡检机器人</h2>
+        <p class="chapter-desc">从AI到真机器——同样的四步法，管AI写文章也管机器人造路。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=15" aria-label="第16章"></a>
+        <div class="chapter-num">第三卷 · 实战</div>
+        <h2 class="chapter-title">16 对外展示</h2>
+        <p class="chapter-desc">好东西放自己电脑等于不存在。三步部署，让世界看到你。</p>
+      </div>
+      <div class="chapter-card">
+        <a href="/common/reader.html?project=guide&chapter=16" aria-label="第17章"></a>
+        <div class="chapter-num">第三卷 · 实战</div>
+        <h2 class="chapter-title">17 从复利到幂塔</h2>
+        <p class="chapter-desc">收官章——AI时代的终极方法论：让每一天的协作都变成可复用的资产。</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  猪猪侠 2025 · Powered by <a href="https://www.natfrp.com/" target="_blank" rel="noopener">Sakura Frp</a>
+</footer>
+
+</body>
+</html>

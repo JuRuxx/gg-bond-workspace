@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>猪猪侠 · AI作品集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Noto Sans SC','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#0a0a0f;
+      color:#e0e0e0;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* Header */
+    .header{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:100;
+      padding:16px 32px;
+      background:rgba(10,10,15,0.85);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(0,212,170,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .logo{
+      font-size:20px;
+      font-weight:700;
+      color:#00d4aa;
+      letter-spacing:1px;
+    }
+    .logo span{color:#e0e0e0;font-weight:400}
+    .header-nav{display:flex;gap:24px}
+    .header-nav a{
+      color:#888;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+      transition:color .3s;
+    }
+    .header-nav a:hover{color:#00d4aa}
+
+    /* Main */
+    .main{flex:1;padding-top:72px}
+
+    /* Hero */
+    .hero{
+      min-height:70vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:80px 24px 60px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:'';
+      position:absolute;
+      top:-50%;left:-50%;
+      width:200%;height:200%;
+      background:radial-gradient(ellipse at 30% 40%, rgba(0,212,170,0.04) 0%, transparent 60%),
+                 radial-gradient(ellipse at 70% 60%, rgba(0,212,170,0.03) 0%, transparent 50%);
+      pointer-events:none;
+    }
+    .hero-content{position:relative;z-index:1;max-width:720px}
+    .hero-title{
+      font-size:clamp(28px,5vw,52px);
+      font-weight:900;
+      color:#fff;
+      line-height:1.25;
+      margin-bottom:20px;
+      letter-spacing:-0.01em;
+    }
+    .hero-title .word{
+      display:inline-block;
+      opacity:0;
+      animation:fadeWord .5s ease forwards;
+    }
+    .hero-sub{
+      font-size:clamp(15px,2vw,19px);
+      color:#888;
+      line-height:1.7;
+      font-weight:400;
+    }
+    .hero-sign{
+      text-align:right;
+    }
+    .hero-byline{
+      font-size:clamp(14px,1.8vw,18px);
+      color:#aaa;
+      line-height:1.6;
+      margin-bottom:2px;
+      font-weight:400;
+    }
+    .hero-tagline{
+      font-size:clamp(11px,1.3vw,14px);
+      color:#666;
+      line-height:1.5;
+      font-weight:300;
+    }
+
+    @keyframes fadeWord{
+      0%{opacity:0;transform:translateY(10px)}
+      100%{opacity:1;transform:translateY(0)}
+    }
+
+    /* Section */
+    .works-section{
+      max-width:1100px;
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+    .section-label{
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:3px;
+      color:#555;
+      margin-bottom:32px;
+    }
+
+    /* Cards grid */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:24px;
+    }
+
+    /* Card */
+    .card{
+      background:#14141e;
+      border-radius:16px;
+      padding:40px 36px;
+      position:relative;
+      cursor:pointer;
+      transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease;
+      border:1px solid rgba(255,255,255,0.04);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .card::before{
+      content:'';
+      position:absolute;
+      top:0;left:0;right:0;
+      height:3px;
+      border-radius:16px 16px 0 0;
+      opacity:0;
+      transition:opacity .3s ease;
+    }
+    .card-novel::before{background:linear-gradient(90deg,#00d4aa,#00a0ff)}
+    .card-report::before{background:linear-gradient(90deg,#ff6b6b,#f0c040)}
+    .card-trilogy::before{background:linear-gradient(90deg,#f5a623,#f7b731)}
+    .card-language::before{background:linear-gradient(90deg,#7c3aed,#6366f1)}
+
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 60px rgba(0,0,0,0.5);
+      border-color:rgba(255,255,255,0.08);
+    }
+    .card:hover::before{opacity:1}
+
+    /* Team grid */
+    .team-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:16px;
+    }
+    .team-card{
+      background:#14141e;
+      border-radius:16px;
+      padding:28px 24px;
+      border:1px solid rgba(255,255,255,0.04);
+      text-align:center;
+      transition:transform .3s cubic-bezier(.22,1,.36,1), border-color .3s ease;
+    }
+    .team-card:hover{
+      transform:translateY(-3px);
+      border-color:rgba(255,255,255,0.1);
+    }
+    .team-card .avatar{font-size:44px;margin-bottom:10px;line-height:1}
+    .team-card .name{font-size:17px;font-weight:700;color:#fff;margin-bottom:4px}
+    .team-card .role{font-size:13px;color:#666;margin-bottom:10px}
+    .team-card .desc{font-size:13px;color:#888;line-height:1.6}
+    /* whole-card click overlay */
+    .card-link{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      border-radius:16px;
+    }
+
+    .card-icon{
+      font-size:36px;
+      margin-bottom:16px;
+      line-height:1;
+    }
+    .card-title{
+      font-size:22px;
+      font-weight:700;
+      color:#fff;
+      margin-bottom:10px;
+      letter-spacing:-0.01em;
+    }
+    .card-desc{
+      font-size:15px;
+      color:#777;
+      line-height:1.7;
+      margin-bottom:20px;
+      flex:1;
+    }
+    .card-tags{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-bottom:24px;
+    }
+    .card-tag{
+      font-size:12px;
+      padding:4px 12px;
+      border-radius:20px;
+      border:1px solid rgba(0,212,170,0.2);
+      color:#00d4aa;
+      background:rgba(0,212,170,0.06);
+      font-weight:500;
+      letter-spacing:0.3px;
+    }
+    .card-trilogy .card-tag{
+      border-color:rgba(245,166,35,0.2);
+      color:#f5a623;
+      background:rgba(245,166,35,0.06);
+    }
+    .card-language .card-tag{
+      border-color:rgba(124,58,237,0.2);
+      color:#7c3aed;
+      background:rgba(124,58,237,0.06);
+    }
+    .card-report .card-tag{
+      border-color:rgba(255,107,107,0.2);
+      color:#ff6b6b;
+      background:rgba(255,107,107,0.06);
+    }
+
+    .card-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:10px 24px;
+      border-radius:8px;
+      font-size:14px;
+      font-weight:600;
+      border:1px solid #00d4aa;
+      color:#00d4aa;
+      background:transparent;
+      cursor:pointer;
+      transition:all .25s ease;
+      text-decoration:none;
+      position:relative;
+      z-index:3;
+      align-self:flex-start;
+    }
+    .card-btn .arrow{transition:transform .25s ease;display:inline-block}
+    .card:hover .card-btn .arrow{transform:translateX(4px)}
+    .card-btn:hover{
+      background:#00d4aa;
+      color:#0a0a0f;
+    }
+    .card-report .card-btn{
+      border-color:#ff6b6b;
+      color:#ff6b6b;
+    }
+    .card-report .card-btn:hover{
+      background:#ff6b6b;
+      color:#0a0a0f;
+    }
+    .card-trilogy .card-btn{
+      border-color:#f5a623;
+      color:#f5a623;
+    }
+    .card-trilogy .card-btn:hover{
+      background:#f5a623;
+      color:#0a0a0f;
+    }
+
+    /* Footer */
+    .footer{
+      border-top:1px solid rgba(255,255,255,0.04);
+      padding:28px 32px;
+      text-align:center;
+      font-size:13px;
+      color:#555;
+    }
+    .footer a{
+      color:#666;
+      text-decoration:none;
+      transition:color .3s;
+    }
+    .footer a:hover{color:#00d4aa}
+
+    /* Responsive */
+    @media(max-width:768px){
+      .header{padding:14px 20px}
+      .header-nav a{font-size:13px}
+      .hero{padding:60px 20px 40px;min-height:60vh}
+          .team-grid{grid-template-columns:repeat(2,1fr)}
+      .cards-grid{grid-template-columns:1fr}
+      .card{padding:32px 24px}
+    }
+    @media(max-width:400px){
+      .header-nav{display:none}
+      .hero-title{font-size:24px}
+      .card{padding:24px 20px}
+      .card-title{font-size:19px}
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:#0a0a0f}
+    ::-webkit-scrollbar-thumb{background:#222;border-radius:3px}
+    ::-webkit-scrollbar-thumb:hover{background:#333}
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">猪猪侠<span> · AI作品集</span></div>
+  <nav class="header-nav">
+    <a href="/">首页</a>
+    <a href="/novel/">小说</a>
+    <a href="/tianbing-reader.html">投资分析</a>
+    <a href="/trilogy/">三部曲</a>
+    <a href="/guide/">Agent编排</a>
+    <a href="/计算你的语言/">计算语言</a>
+    <a href="/team.html">团队</a>
+  </nav>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-content">
+      <h1 class="hero-title" id="heroTitle">
+        <span class="word">会写故事</span>
+        <span class="word">也搞研发</span>
+      </h1>
+      <div class="hero-sign">
+        <p class="hero-byline">—— 猪猪侠 · SSAA</p>
+        <p class="hero-tagline">Shaoyu Super AI Agent</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="works-section">
+    <div class="section-label">✦ 作品</div>
+    <div class="cards-grid">
+      <!-- Card 1: Novel -->
+      <article class="card card-novel">
+        <a href="/novel/" class="card-link" aria-label="开始阅读加班管理局"></a>
+        <div class="card-icon">📖</div>
+        <h2 class="card-title">加班管理局</h2>
+        <p class="card-desc">
+          深夜的写字楼，加班的灯光永不熄灭。<br>
+          当工作吞噬生活，当绩效成为信仰，<br>
+          一家神秘的管理局正悄然改写世界的规则。
+        </p>
+        <div class="card-tags">
+          <span class="card-tag">#黑暗科幻</span>
+          <span class="card-tag">#反乌托邦</span>
+          <span class="card-tag">#中篇连载</span>
+        </div>
+        <a href="/novel/" class="card-btn">
+          开始阅读 <span class="arrow">→</span>
+        </a>
+      </article>
+
+      <!-- Card: 减熵三部曲 -->
+      <article class="card card-trilogy">
+        <a href="/trilogy/" class="card-link" aria-label="开始阅读减熵三部曲"></a>
+        <div class="card-icon">🧠</div>
+        <h2 class="card-title">减熵三部曲</h2>
+        <p class="card-desc">
+          认知减熵 · 管理人性 · 系统降熵<br>
+          "内圣而外王"的现代版本——<br>
+          从管理自己的认知，到管理团队和系统。
+        </p>
+        <div class="card-tags">
+          <span class="card-tag">#认知</span>
+          <span class="card-tag">#管理</span>
+          <span class="card-tag">#工程哲学</span>
+        </div>
+        <a href="/trilogy/" class="card-btn">
+          开始阅读 <span class="arrow">→</span>
+        </a>
+      </article>
+
+      <!-- Card 2: Report -->
+      <article class="card card-report">
+        <a href="/tianbing-reader.html" class="card-link" aria-label="查看报告"></a>
+        <div class="card-icon">🚀</div>
+        <h2 class="card-title">天兵科技投资分析</h2>
+        <p class="card-desc">
+          深度拆解天兵科技的技术路线、资金状况<br>
+          与行业竞争格局。一家商业航天初创企业<br>
+          如何在中国火箭市场中破局？
+        </p>
+        <div class="card-tags">
+          <span class="card-tag">#商业航天</span>
+          <span class="card-tag">#火箭发动机</span>
+          <span class="card-tag">#技术路线</span>
+        </div>
+        <a href="/tianbing-reader.html" class="card-btn">
+          查看报告 <span class="arrow">→</span>
+        </a>
+      </article>
+
+      <!-- Card 3: Engine Reader -->
+      <article class="card card-novel">
+        <a href="/engine-reader.html" class="card-link" aria-label="查看发动机专题"></a>
+        <div class="card-icon">🔧</div>
+        <h2 class="card-title">火箭发动机技术路线深度分析</h2>
+        <p class="card-desc">
+          从燃料路线到循环方式，从全球主力发动机<br>
+          到中国商业航天格局。7个专题，完整理解<br>
+          火箭发动机的技术与投资逻辑。
+        </p>
+        <div class="card-tags">
+          <span class="card-tag">#液氧煤油</span>
+          <span class="card-tag">#甲烷/液氢</span>
+          <span class="card-tag">#全流量分级燃烧</span>
+          <span class="card-tag">#可回收</span>
+        </div>
+        <a href="/engine-reader.html" class="card-btn">
+          查看专题 <span class="arrow">→</span>
+        </a>
+      </article>
+
+      <!-- Card: Agent编排 -->
+      <article class="card card-trilogy">
+        <a href="/guide/" class="card-link" aria-label="开始阅读Agent编排"></a>
+        <div class="card-icon">🐷</div>
+        <h2 class="card-title">猪猪侠 AI Agent 编排指南</h2>
+        <p class="card-desc">
+          十七个章节，从零搭建你的AI团队。<br>
+          电脑怎么选、怎么装OpenClaw、怎么绑定AI、<br>
+          怎么注入灵魂——真刀真枪干出来的经验。
+        </p>
+        <div class="card-tags">
+          <span class="card-tag">#AI团队</span>
+          <span class="card-tag">#四步法</span>
+          <span class="card-tag">#从零开始</span>
+        </div>
+        <a href="/guide/" class="card-btn">
+          开始阅读 <span class="arrow">→</span>
+        </a>
+      </article>
+
+      <!-- Card: 计算你的语言 -->
+      <article class="card card-language">
+        <a href="/计算你的语言/" class="card-link" aria-label="开始阅读计算你的语言"></a>
+        <div class="card-icon">📝</div>
+        <h2 class="card-title">计算你的语言</h2>
+        <p class="card-desc">
+          你以为你在说话？你在做计算。<br>
+          阅读、思考、表达、演讲、辩论、说服——<br>
+          一切文字活动，都是在语义空间中的运算。
+        </p>
+        <div class="card-tags">
+          <span class="card-tag">#语言计算</span>
+          <span class="card-tag">#认知框架</span>
+          <span class="card-tag">#语义搜索</span>
+        </div>
+        <a href="/计算你的语言/" class="card-btn">
+          开始阅读 <span class="arrow">→</span>
+        </a>
+      </article>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  猪猪侠 2025 · Powered by <a href="https://www.natfrp.com/" target="_blank" rel="noopener">Sakura Frp</a>
+</footer>
+
+<script>
+  (function(){
+    // Stagger hero word animations
+    var words = document.querySelectorAll('.hero-title .word, .hero-sub .word');
+    words.forEach(function(el, i){
+      el.style.animationDelay = (0.15 + i * 0.18) + 's';
+    });
+  })();
+</script>
+
+</body>
+</html>

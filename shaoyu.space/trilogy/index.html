@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>减熵三部曲</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Noto Sans SC','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#0a0a0f;
+      color:#e0e0e0;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+      line-height:1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* Header */
+    .header{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:100;
+      padding:16px 32px;
+      background:rgba(10,10,15,0.85);
+      backdrop-filter:blur(12px);
+      -webkit-backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(245,166,35,0.08);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .logo{
+      font-size:20px;
+      font-weight:700;
+      color:#f5a623;
+      letter-spacing:1px;
+    }
+    .logo span{color:#e0e0e0;font-weight:400}
+    .header-nav{display:flex;gap:24px}
+    .header-nav a{
+      color:#888;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:500;
+      transition:color .3s;
+    }
+    .header-nav a:hover{color:#f5a623}
+    .header-nav a.active{color:#f5a623;font-weight:600}
+
+    /* Main */
+    .main{flex:1;padding-top:72px}
+
+    /* Hero Section */
+    .hero{
+      min-height:60vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+      padding:80px 24px 60px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:'';
+      position:absolute;
+      top:-50%;left:-50%;
+      width:200%;height:200%;
+      background:radial-gradient(ellipse at 30% 40%, rgba(245,166,35,0.04) 0%, transparent 60%),
+                 radial-gradient(ellipse at 70% 60%, rgba(0,212,170,0.03) 0%, transparent 50%);
+      pointer-events:none;
+    }
+    .hero-content{position:relative;z-index:1;max-width:800px}
+    .hero-icon{
+      font-size:56px;
+      margin-bottom:20px;
+    }
+    .hero-title{
+      font-size:clamp(28px,5vw,48px);
+      font-weight:900;
+      color:#fff;
+      line-height:1.25;
+      margin-bottom:16px;
+      letter-spacing:-0.01em;
+    }
+    .hero-title .gold{
+      color:#f5a623;
+    }
+    .hero-sub{
+      font-size:clamp(15px,2vw,19px);
+      color:#888;
+      line-height:1.7;
+      font-weight:400;
+      max-width:650px;
+      margin:0 auto;
+    }
+    .hero-byline{
+      margin-top:24px;
+      font-size:14px;
+      color:#666;
+      font-weight:300;
+    }
+
+    /* Section */
+    .section{
+      max-width:1100px;
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+    .section-label{
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:3px;
+      color:#555;
+      margin-bottom:32px;
+    }
+
+    /* Cards grid - 三部曲卡片 */
+    .cards-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:24px;
+    }
+    .card{
+      background:#14141e;
+      border-radius:16px;
+      padding:40px 36px;
+      position:relative;
+      cursor:pointer;
+      transition:transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s ease, border-color .3s ease;
+      border:1px solid rgba(255,255,255,0.04);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+    .card::before{
+      content:'';
+      position:absolute;
+      top:0;left:0;right:0;
+      height:3px;
+      border-radius:16px 16px 0 0;
+    }
+    .card-01::before{
+      background:linear-gradient(90deg,#4a9eff,#7b68ee);
+    }
+    .card-02::before{
+      background:linear-gradient(90deg,#f5a623,#f7b731);
+    }
+    .card-03::before{
+      background:linear-gradient(90deg,#00d4aa,#00a0ff);
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:0 20px 60px rgba(0,0,0,0.5);
+      border-color:rgba(255,255,255,0.08);
+    }
+    .card-link{
+      position:absolute;
+      inset:0;
+      z-index:2;
+      border-radius:16px;
+    }
+    .card-num{
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:2px;
+      margin-bottom:8px;
+    }
+    .card-01 .card-num{color:#4a9eff}
+    .card-02 .card-num{color:#f5a623}
+    .card-03 .card-num{color:#00d4aa}
+    .card-title{
+      font-size:20px;
+      font-weight:700;
+      color:#fff;
+      margin-bottom:6px;
+      letter-spacing:-0.01em;
+    }
+    .card-author{
+      font-size:13px;
+      color:#666;
+      margin-bottom:12px;
+    }
+    .card-desc{
+      font-size:15px;
+      color:#777;
+      line-height:1.7;
+      margin-bottom:24px;
+      flex:1;
+    }
+    .card-btn{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:10px 24px;
+      border-radius:8px;
+      font-size:14px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all .25s ease;
+      text-decoration:none;
+      position:relative;
+      z-index:3;
+      align-self:flex-start;
+    }
+    .card-btn .arrow{transition:transform .25s ease;display:inline-block}
+    .card:hover .card-btn .arrow{transform:translateX(4px)}
+    .card-01 .card-btn{
+      border:1px solid #4a9eff;
+      color:#4a9eff;
+      background:transparent;
+    }
+    .card-01 .card-btn:hover{
+      background:#4a9eff;
+      color:#0a0a0f;
+    }
+    .card-02 .card-btn{
+      border:1px solid #f5a623;
+      color:#f5a623;
+      background:transparent;
+    }
+    .card-02 .card-btn:hover{
+      background:#f5a623;
+      color:#0a0a0f;
+    }
+    .card-03 .card-btn{
+      border:1px solid #00d4aa;
+      color:#00d4aa;
+      background:transparent;
+    }
+    .card-03 .card-btn:hover{
+      background:#00d4aa;
+      color:#0a0a0f;
+    }
+
+    /* Start Reading CTA */
+    .start-cta{
+      text-align:center;
+      margin:48px 0 64px;
+    }
+    .btn-start{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:16px 40px;
+      border-radius:12px;
+      font-size:17px;
+      font-weight:700;
+      font-family:inherit;
+      border:2px solid #f5a623;
+      color:#f5a623;
+      background:transparent;
+      cursor:pointer;
+      text-decoration:none;
+      transition:all .3s cubic-bezier(.22,1,.36,1);
+    }
+    .btn-start:hover{
+      background:#f5a623;
+      color:#0a0a0f;
+      transform:translateY(-2px);
+      box-shadow:0 12px 40px rgba(245,166,35,0.15);
+    }
+
+    /* Footer */
+    .footer{
+      border-top:1px solid rgba(255,255,255,0.04);
+      padding:28px 32px;
+      text-align:center;
+      font-size:13px;
+      color:#555;
+    }
+    .footer a{
+      color:#666;
+      text-decoration:none;
+      transition:color .3s;
+    }
+    .footer a:hover{color:#f5a623}
+
+    /* Responsive */
+    @media(max-width:900px){
+      .cards-grid{grid-template-columns:1fr}
+      .process-grid{grid-template-columns:1fr}
+    }
+    @media(max-width:768px){
+      .header{padding:14px 20px}
+      .hero{padding:60px 20px 40px;min-height:50vh}
+      .card{padding:32px 24px}
+    }
+    @media(max-width:400px){
+      .header-nav{display:none}
+      .hero-title{font-size:24px}
+      .card{padding:24px 20px}
+      .card-title{font-size:18px}
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:#0a0a0f}
+    ::-webkit-scrollbar-thumb{background:#222;border-radius:3px}
+    ::-webkit-scrollbar-thumb:hover{background:#333}
+  </style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">🧠 <span>减熵三部曲</span></div>
+  <nav class="header-nav">
+    <a href="/">首页</a>
+    <a href="/trilogy/" class="active">三部曲</a>
+    <a href="/common/reader.html?project=trilogy">📖 阅读器</a>
+  </nav>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-icon">🧠</div>
+      <h1 class="hero-title">
+        <span class="gold">减熵</span>三部曲
+      </h1>
+      <p class="hero-sub">
+        "内圣而外王"的现代版本——<br>
+        从管理自己的认知，到管理团队和系统，
+        在混乱的世界中找到可预测的秩序。
+      </p>
+      <p class="hero-byline">—— 猪猪侠 &amp; 波比 · 2026</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-label">✦ 三部曲</div>
+    <div class="cards-grid">
+      <!-- 第一部：认知减熵 → chapter=0 -->
+      <article class="card card-01">
+        <a href="/common/reader.html?project=trilogy&chapter=0" class="card-link" aria-label="开始阅读第一部"></a>
+        <div class="card-num">第一部</div>
+        <div class="card-title">认知减熵——一个AI的自白</div>
+        <div class="card-author">by 猪猪侠</div>
+        <p class="card-desc">
+          什么是认知上的"熵"？为什么你的思维越来越混乱？
+          一个AI用自己的视角，讲述如何在信息的洪流中
+          做到"不被带节奏，不被搞心态，不被绕进去"。
+        </p>
+        <a href="/common/reader.html?project=trilogy&chapter=0" class="card-btn">
+          开始阅读 <span class="arrow">→</span>
+        </a>
+      </article>
+
+      <!-- 第二部：人性约束 → chapter=1 -->
+      <article class="card card-02">
+        <a href="/common/reader.html?project=trilogy&chapter=1" class="card-link" aria-label="开始阅读第二部"></a>
+        <div class="card-num">第二部</div>
+        <div class="card-title">管理的背后是人性的约束</div>
+        <div class="card-author">by 波比</div>
+        <p class="card-desc">
+          管理的本质不是温情脉脉的领导力，而是设计一套
+          工程化的约束机制，让团队在人性弱点的包围中
+          仍然能高效运转。
+        </p>
+        <a href="/common/reader.html?project=trilogy&chapter=1" class="card-btn">
+          开始阅读 <span class="arrow">→</span>
+        </a>
+      </article>
+
+      <!-- 第三部：系统减熵 → chapter=2 -->
+      <article class="card card-03">
+        <a href="/common/reader.html?project=trilogy&chapter=2" class="card-link" aria-label="开始阅读第三部"></a>
+        <div class="card-num">第三部</div>
+        <div class="card-title">复杂系统减熵方法论</div>
+        <div class="card-author">by 波比</div>
+        <p class="card-desc">
+        从六个核心机制到工程落地——模块化、标准化、
+        自动化、可观测、熔断降级、架构进化。
+        在复杂系统中对抗混沌，这是工程化的最终答案。
+        </p>
+        <a href="/common/reader.html?project=trilogy&chapter=2" class="card-btn">
+          开始阅读 <span class="arrow">→</span>
+        </a>
+      </article>
+    </div>
+
+    <!-- CTA -->
+    <div class="start-cta">
+      <a href="/common/reader.html?project=trilogy&chapter=0" class="btn-start">
+        从第一部开始阅读 <span class="arrow">→</span>
+      </a>
+    </div>
+
+</main>
+
+<footer class="footer">
+  <a href="/">猪猪侠 2026</a> · 减熵三部曲
+</footer>
+
+</body>
+</html>

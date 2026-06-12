@@ -1,0 +1,45 @@
+(common) {
+	root * /Users/a1/.openclaw/workspace/shaoyu.space
+}
+
+shaoyu.space:443 {
+	tls /Users/a1/.openclaw/workspace/shaoyu.space/server.crt /Users/a1/.openclaw/workspace/shaoyu.space/server.key
+	import common
+	handle_path /trilogy/*.md {
+		header Content-Type "text/plain; charset=utf-8"
+		file_server
+	}
+	handle_path /guide/*.md {
+		header Content-Type "text/plain; charset=utf-8"
+		file_server
+	}
+	handle {
+		file_server
+	}
+}
+
+shaoyu.space:80 {
+	root * /Users/a1/.openclaw/workspace/shaoyu.space
+	file_server
+}
+
+:8080 {
+	root * /Users/a1/.openclaw/workspace/shaoyu.space
+	file_server
+}
+
+:18888 {
+	tls /Users/a1/.openclaw/workspace/shaoyu.space/server.crt /Users/a1/.openclaw/workspace/shaoyu.space/server.key
+	import common
+	handle_path /trilogy/*.md {
+		header Content-Type "text/plain; charset=utf-8"
+		file_server
+	}
+	handle_path /guide/*.md {
+		header Content-Type "text/plain; charset=utf-8"
+		file_server
+	}
+	handle {
+		file_server
+	}
+}

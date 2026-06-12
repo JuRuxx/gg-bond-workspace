@@ -1,0 +1,32 @@
+# 巡检机器人额外依赖
+# 在树莓派5上安装：pip install -r requirements_extra.txt
+#
+# 注意：部分依赖需要先安装系统包 (见 setup_extra.sh)
+
+# --- 传感器驱动 ---
+# MLX90614 红外传感器
+smbus2>=0.4.0
+
+# --- 配置管理 ---
+# YAML 配置支持 (如果不用JSON可跳过)
+PyYAML>=6.0
+
+# --- 通信 (可选) ---
+# MQTT 客户端 (启用 MQTT 通信时需要)
+# paho-mqtt>=1.6.0
+# websockets>=11.0
+
+# --- 硬件 GPIO ---
+# RPi.GPIO (树莓派标准GPIO库，预装在Raspberry Pi OS中)
+# 如果缺少: sudo apt install python3-rpi.gpio
+# 或: pip install RPi.GPIO
+
+# --- 视觉 (与官方 cv_ctrl.py 配合) ---
+# opencv-python>=4.8.0         (官方已有)
+# picamera2>=0.3.0             (树莓派5摄像头)
+
+# --- 开发/测试辅助 ---
+# pytest>=7.0
+
+# --- 网络请求 (HTTP推送) ---
+# requests>=2.28.0

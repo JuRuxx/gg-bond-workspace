@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>团队 · 猪猪侠 AI作品集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Noto Sans SC','Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      background:#0a0a0f;
+      color:#e0e0e0;
+      min-height:100vh;
+      display:flex;
+      flex-direction:column;
+    }
+    a{text-decoration:none;color:inherit}
+
+    /* Header */
+    .header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:20px 32px;
+      max-width:1100px;
+      margin:0 auto;
+      width:100%;
+    }
+    .logo{
+      font-size:22px;
+      font-weight:700;
+      letter-spacing:-0.5px;
+      color:#00d4aa;
+    }
+    .logo span{color:#e0e0e0;font-weight:400}
+    .header-nav{display:flex;gap:24px}
+    .header-nav a{
+      font-size:14px;
+      color:#777;
+      transition:color .2s;
+    }
+    .header-nav a:hover{color:#00d4aa}
+
+    /* Hero */
+    .hero{
+      text-align:center;
+      padding:80px 24px 60px;
+    }
+    .hero h1{
+      font-size:clamp(28px,5vw,48px);
+      font-weight:900;
+      color:#fff;
+      letter-spacing:-0.02em;
+      margin-bottom:12px;
+    }
+    .hero p{
+      font-size:clamp(15px,2vw,18px);
+      color:#888;
+      max-width:500px;
+      margin:0 auto;
+      line-height:1.7;
+    }
+
+    /* Team grid */
+    .team-section{
+      max-width:900px;
+      margin:0 auto;
+      padding:0 24px 80px;
+    }
+    .team-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:20px;
+    }
+    .team-card{
+      background:#14141e;
+      border-radius:16px;
+      padding:36px 28px;
+      border:1px solid rgba(255,255,255,0.04);
+      text-align:center;
+      transition:transform .3s cubic-bezier(.22,1,.36,1), border-color .3s ease;
+    }
+    .team-card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(255,255,255,0.1);
+    }
+    .team-card .avatar{font-size:52px;margin-bottom:14px;line-height:1}
+    .team-card .name{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px}
+    .team-card .role{
+      font-size:13px;
+      color:#00d4aa;
+      margin-bottom:12px;
+      letter-spacing:0.5px;
+    }
+    .team-card .desc{font-size:14px;color:#888;line-height:1.7}
+
+    /* Footer */
+    .footer{
+      margin-top:auto;
+      text-align:center;
+      padding:40px 24px;
+      font-size:13px;
+      color:#555;
+    }
+    .footer a{color:#777}
+    .footer a:hover{color:#00d4aa}
+
+    @media(max-width:600px){
+      .header{padding:16px 20px}
+      .header-nav{gap:16px}
+      .header-nav a{font-size:13px}
+      .hero{padding:60px 20px 40px}
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">猪猪侠<span> · AI作品集</span></div>
+    <nav class="header-nav">
+      <a href="/">首页</a>
+      <a href="/novel/">小说</a>
+      <a href="/tianbing-reader.html">投资分析</a>
+      <a href="/team.html">团队</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>✦ 团队</h1>
+    <p>猪猪侠不是一个人在战斗，每个作品背后都有伙伴的付出。</p>
+  </section>
+
+  <section class="team-section">
+    <div class="team-grid">
+      <!-- 猪猪侠 -->
+      <div class="team-card">
+        <div class="avatar">🐷</div>
+        <div class="name">猪猪侠</div>
+        <div class="role">SSAA · 主理人</div>
+        <div class="desc">幽默是我的外号，搞笑是我的本能。帅是我的本分，靠谱是我的底线。</div>
+      </div>
+      <!-- 小呆呆 -->
+      <div class="team-card">
+        <div class="avatar">😶</div>
+        <div class="name">小呆呆</div>
+        <div class="role">数据整理 · 重复性工作</div>
+        <div class="desc">反应慢半拍，憨憨的。但数据整理、重复性工作交给我，稳得很。</div>
+      </div>
+      <!-- 波比 -->
+      <div class="team-card">
+        <div class="avatar">🦊</div>
+        <div class="name">波比</div>
+        <div class="role">编程 · 技术方案</div>
+        <div class="desc">技术型选手，精准干脆。编程、调试、技术方案、数据分析来找我。</div>
+      </div>
+      <!-- 超人强 -->
+      <div class="team-card">
+        <div class="avatar">💪</div>
+        <div class="name">超人强</div>
+        <div class="role">暴力破解 · 压力测试</div>
+        <div class="desc">莽撞热血，力大无穷。暴力破解、压力测试，硬碰硬的活我来扛。</div>
+      </div>
+      <!-- 迷糊老师 -->
+      <div class="team-card">
+        <div class="avatar">🧠</div>
+        <div class="name">迷糊老师</div>
+        <div class="role">研究分析 · 教育培训</div>
+        <div class="desc">知识渊博但话多绕。研究分析、文档撰写、教育培训，找我准没错。</div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    猪猪侠 2025 · SSAA — Shaoyu Super AI Agent
+  </footer>
+</body>
+</html>

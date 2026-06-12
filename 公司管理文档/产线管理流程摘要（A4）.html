@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@page {
+  size: A4;
+  margin: 0;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; color: #222; }
+
+.page {
+  width: 210mm;
+  height: 297mm;
+  padding: 18mm 16mm;
+  position: relative;
+  page-break-after: always;
+}
+
+/* ===== 正面 ===== */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2.5px solid #1a5276;
+  padding-bottom: 6mm;
+  margin-bottom: 6mm;
+}
+.header h1 {
+  font-size: 18pt;
+  color: #1a5276;
+  letter-spacing: 1px;
+}
+.header .sub {
+  font-size: 9pt;
+  color: #666;
+  text-align: right;
+  line-height: 1.5;
+}
+
+.section-title {
+  font-size: 12pt;
+  font-weight: bold;
+  color: #1a5276;
+  padding: 4mm 0 2mm 0;
+}
+
+/* 表格通用 */
+table { width: 100%; border-collapse: collapse; font-size: 8.5pt; margin-bottom: 3mm; }
+th { background: #1a5276; color: #fff; text-align: center; padding: 3mm 2mm; font-weight: 600; }
+td { border: 1px solid #bbb; padding: 2.2mm 2mm; vertical-align: top; }
+tr:nth-child(even) td { background: #f6f9fc; }
+
+.label-p0 { background: #c0392b; color: #fff; padding: 0 3px; border-radius: 2px; font-weight: bold; font-size: 7.5pt; }
+.label-p1 { background: #e67e22; color: #fff; padding: 0 3px; border-radius: 2px; font-weight: bold; font-size: 7.5pt; }
+.label-p2 { background: #2980b9; color: #fff; padding: 0 3px; border-radius: 2px; font-weight: bold; font-size: 7.5pt; }
+.label-p3 { background: #27ae60; color: #fff; padding: 0 3px; border-radius: 2px; font-weight: bold; font-size: 7.5pt; }
+
+.icon-badge {
+  display: inline-block;
+  font-weight: bold;
+  padding: 0 4px;
+  border-radius: 2px;
+  font-size: 7.5pt;
+}
+.badge-a { background: #c0392b; color: #fff; }
+.badge-b { background: #e67e22; color: #fff; }
+.badge-c { background: #7f8c8d; color: #fff; }
+
+.flex-row {
+  display: flex;
+  gap: 3mm;
+  margin-bottom: 3mm;
+}
+.flex-row > div { flex: 1; }
+
+.info-box {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 3mm;
+  font-size: 8.5pt;
+  line-height: 1.6;
+}
+.info-box h4 {
+  font-size: 9pt;
+  color: #1a5276;
+  margin-bottom: 2mm;
+}
+
+.highlight {
+  background: #fff3cd;
+  padding: 2.5mm 3mm;
+  border-left: 3px solid #f0ad4e;
+  font-size: 8.5pt;
+  line-height: 1.5;
+  margin-bottom: 3mm;
+}
+
+.two-col { display: flex; gap: 3mm; margin-bottom: 3mm; }
+.two-col > div { flex: 1; }
+
+ul { margin: 1.5mm 0 1.5mm 4mm; font-size: 8.5pt; line-height: 1.6; }
+li { margin-bottom: 0.5mm; }
+
+.signature {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 4mm;
+  margin-top: 4mm;
+  border-top: 1.5px solid #999;
+  font-size: 9pt;
+}
+.signature div { width: 45%; }
+.signature .line { border-bottom: 1px solid #333; margin-top: 4mm; padding-bottom: 1mm; }
+
+small { font-size: 7.5pt; color: #888; }
+</style>
+</head>
+<body>
+
+<!-- ========== 正面：服务流程 ========== -->
+<div class="page">
+  <div class="header">
+    <h1>技术部产线管理流程摘要</h1>
+    <div class="sub">
+      奥普新（陆河）科技有限公司<br>
+      试行期：一个月 · 月底复盘协商调整
+    </div>
+  </div>
+
+  <div class="section-title">▎产线服务流程（故障分级响应）</div>
+
+  <table>
+    <tr><th style="width:18%">等级</th><th style="width:18%">定义</th><th style="width:38%">典型例子</th><th style="width:26%">技术部响应</th></tr>
+    <tr>
+      <td><span class="label-p0">P0 紧急</span></td>
+      <td>产线停线<br>无法生产</td>
+      <td>设备完全不动、主传动故障、关键工位失效</td>
+      <td><b>15分钟到场</b><br>先修后补单</td>
+    </tr>
+    <tr>
+      <td><span class="label-p1">P1 重要</span></td>
+      <td>设备异常<br>效率下降</td>
+      <td>节拍变慢、某工位不稳定、需调参</td>
+      <td><b>2小时内</b>响应<br>按排程处理</td>
+    </tr>
+    <tr>
+      <td><span class="label-p2">P2 一般</span></td>
+      <td>小故障<br>日常调试</td>
+      <td>传感器误报、螺丝松动、程序微调</td>
+      <td><b>当天或次日</b></td>
+    </tr>
+    <tr>
+      <td><span class="label-p3">P3 计划性</span></td>
+      <td>保养、优化<br>换型调试</td>
+      <td>周保养、程序升级、新产品换型</td>
+      <td>按<b>周计划</b>排期</td>
+    </tr>
+  </table>
+
+  <div class="two-col">
+    <div class="info-box">
+      <h4>📞 怎么报修</h4>
+      <ul>
+        <li><b>P0（停线）</b>：先电话/微信语音通知技术部值班人，后补填单</li>
+        <li><b>P1/P2/P3</b>：先填腾讯文档在线表格（时间/设备/问题/预估等级/报修人），技术部按排程处理</li>
+        <li>同一设备同一问题 3 天内报 ≥2 次 → <b>自动升级</b>一级处理</li>
+      </ul>
+    </div>
+    <div class="info-box">
+      <h4>⏰ 技术部响应时间</h4>
+      <ul>
+        <li><b>工作日 8:00-17:30</b>：值班工程师优先响应</li>
+        <li><b>午休 12:00-13:30</b>：仅响应 P0，其余排队</li>
+        <li><b>下班后/节假日</b>：仅 P0，电话/微信语音联系技术部主管调度</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="flex-row">
+    <div class="info-box" style="flex:1">
+      <h4>⬆ 异常升级</h4>
+      <div style="font-size:8.5pt; line-height:1.6">
+        值班工程师 <b>→</b> 设备负责人 <b>→</b> 技术部主管 <b>→</b> 供应商
+      </div>
+    </div>
+    <div class="info-box" style="flex:1">
+      <h4>⚖ 分级争议</h4>
+      <div style="font-size:8.5pt; line-height:1.6">
+        双方主管协商裁定，<b>不在产线上争执</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title" style="margin-top:4mm">▎产线意见流程（改进建议管理）</div>
+
+  <table>
+    <tr><th style="width:16%">等级</th><th style="width:18%">定义</th><th style="width:32%">典型例子</th><th style="width:20%">提出方式</th><th style="width:14%">期望回应</th></tr>
+    <tr>
+      <td><span class="icon-badge badge-a">A 必须改</span></td>
+      <td>安全隐患<br>可能造成损坏</td>
+      <td>跳过安全门禁、违规操作、强行运行</td>
+      <td>书面+正式会议<br>抄送双方主管</td>
+      <td><b>24h</b>确认</td>
+    </tr>
+    <tr>
+      <td><span class="icon-badge badge-b">B 建议改</span></td>
+      <td>影响设备寿命<br>效率或保养</td>
+      <td>保养不到位、操作习惯不良</td>
+      <td>书面<br>值班工程师→产线组长</td>
+      <td><b>48h</b>确认</td>
+    </tr>
+    <tr>
+      <td><span class="icon-badge badge-c">C 提醒</span></td>
+      <td>小问题<br>提醒即可</td>
+      <td>工具未归位、地面油污、记录潦草</td>
+      <td>口头提醒<br>记录备查</td>
+      <td>无需回应</td>
+    </tr>
+  </table>
+
+  <div class="highlight">
+    🔔 同一 C 级问题口头提醒 ≥2 次未改 → 自动升级为 B 级
+  </div>
+
+  <div class="two-col">
+    <div class="info-box">
+      <h4>📋 提出流程</h4>
+      <div style="font-size:8.5pt; line-height:1.7">
+        <b>①</b> 发现问题 → <b>②</b> 判断等级<br>
+        <b>③</b> 内部确认（A/B级统一口径）<br>
+        <b>④</b> 选择方式提出<br>
+        <b>⑤</b> 跟踪闭环 · <b>2周无反馈升级</b>
+      </div>
+      <div style="font-size:7.5pt; color:#555; margin-top:1.5mm">
+        ✓ 同一问题不要多人重复提<br>
+        ✓ 指向问题，不指责任何人
+      </div>
+    </div>
+    <div class="info-box">
+      <h4>📊 登记表（腾讯文档）</h4>
+      <div style="font-size:7pt; line-height:1.5; color:#444">
+        提出日期 | 提出人 | 问题描述 | 等级<br>
+        指出对象 | 反馈方式 | 生产部回应 | 整改状态 | 关闭日期
+      </div>
+      <div style="font-size:7.5pt; color:#555; margin-top:1.5mm">
+        A/B级必须登记，C级可选登记
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-bottom:3mm">
+    <h4>📅 定期复盘</h4>
+    <div style="display:flex; gap:2mm; font-size:8pt;">
+      <div style="flex:1"><b>每周</b>：内部汇总当周意见，快速响应未闭环项</div>
+      <div style="flex:1"><b>每月</b>：技术部内部汇总，讨论采纳/拒绝/反复问题</div>
+      <div style="flex:1"><b>每季度</b>：形成《设备操作规范改进建议》提交生产部</div>
+    </div>
+  </div>
+
+  <div class="signature">
+    <div>技术部主管：<div class="line"></div></div>
+    <div>生产部主管：<div class="line"></div></div>
+  </div>
+  <div style="text-align:right; margin-top:2mm">
+    <span style="font-size:8pt; color:#888">日期：____年____月____日</span>
+  </div>
+  <small style="position:absolute; bottom:8mm; right:16mm">产线管理流程摘要 v1.0</small>
+</div>
+</body>
+</html>

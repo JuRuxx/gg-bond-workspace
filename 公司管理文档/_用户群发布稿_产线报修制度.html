@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+@page { size: A4; margin: 0; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; color: #222; }
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 18mm 16mm;
+  position: relative;
+}
+
+h1 {
+  font-size: 18pt;
+  color: #1a5276;
+  letter-spacing: 1px;
+  border-bottom: 2.5px solid #1a5276;
+  padding-bottom: 6mm;
+  margin-bottom: 6mm;
+}
+h2 {
+  font-size: 12pt;
+  font-weight: bold;
+  color: #1a5276;
+  padding: 4mm 0 2mm 0;
+}
+h3 {
+  font-size: 10.5pt;
+  font-weight: bold;
+  color: #1a5276;
+  padding: 3mm 0 1.5mm 0;
+}
+h4 { font-size: 10pt; font-weight: bold; color: #333; padding: 2mm 0 1mm 0; }
+h5, h6 { font-size: 9.5pt; font-weight: bold; color: #555; padding: 1.5mm 0 1mm 0; }
+
+table { width: 100%; border-collapse: collapse; font-size: 9pt; margin-bottom: 3mm; }
+th { background: #1a5276; color: #fff; text-align: center; padding: 3mm 2mm; font-weight: 600; }
+td { border: 1px solid #bbb; padding: 2.2mm 2mm; vertical-align: top; }
+tr:nth-child(even) td { background: #f6f9fc; }
+
+p { font-size: 9pt; line-height: 1.7; margin: 2mm 0; }
+
+ul, ol {
+  margin: 1.5mm 0 1.5mm 4mm;
+  font-size: 9pt;
+  line-height: 1.6;
+}
+li { margin-bottom: 0.5mm; }
+
+pre {
+  background: #f4f4f4;
+  padding: 12px 16px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-size: 8.5pt;
+  margin: 3mm 0;
+  line-height: 1.6;
+  font-family: 'Courier New', 'Menlo', monospace;
+}
+code {
+  background: #f0f0f0;
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 8.5pt;
+  font-family: 'Courier New', 'Menlo', monospace;
+}
+pre code { background: none; padding: 0; }
+
+blockquote {
+  border-left: 4px solid #999;
+  padding: 6px 16px;
+  margin: 3mm 0;
+  color: #555;
+  background: #f9f9f9;
+  font-size: 9pt;
+  line-height: 1.6;
+}
+
+hr { margin: 5mm 0; border: none; border-top: 1.5px solid #ccc; }
+
+@media print {
+  body { padding: 0; }
+  .page { page-break-after: always; }
+  h1, h2, h3 { page-break-after: avoid; }
+  table { page-break-inside: auto; }
+  tr { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+<h1>0603会议纪要——产线故障报修、巡检问题登记及相关工作制度</h1>
+<p>各位同事：</p>
+<p>今天下午开了产线故障报修及相关工作安排会议，现将会议讨论确定的制度内容整理如下，发给大家确认。</p>
+<p>请大家看看有没有需要调整的地方，群里反馈。确认后统一由陈总、冯总、田总定为执行制度。</p>
+<hr>
+<h2>一、故障分级</h2>
+<table>
+<tr><th>级别</th><th style="text-align:center">定义</th><th>响应要求</th></tr>
+<tr><td><strong>P0</strong></td><td style="text-align:center">产线停产</td><td>及时响应（15分钟内），当天解决</td></tr>
+<tr><td><strong>P1</strong></td><td style="text-align:center">设备异常但能产，效率下降</td><td>2小时内响应，当天解决</td></tr>
+<tr><td><strong>P2</strong></td><td style="text-align:center">一般故障、日常调试</td><td>当天或次日处理</td></tr>
+<tr><td><strong>P3</strong></td><td style="text-align:center">保养、计划性维修</td><td>按周计划排期</td></tr>
+</table>
+<ul><li>P0级由生产部主管判定</li></ul>
+<hr>
+<h2>二、报修方式</h2>
+<ol><li><strong>统一拉微信群报修</strong>，请按以下格式复制填空：</li></ol>
+<pre><code>【等级】P_
+【设备】
+【问题】
+【机型】
+【报修人】
+【地点】
+【时间】</code></pre>
+<p><strong>示例（P0停产）：</strong></p>
+<pre><code>【等级】P0
+【设备】三轴点胶机
+【问题】主轴卡死不动，产线停线
+【机型】
+【报修人】张三
+【地点】3楼A线
+【时间】14:35</code></pre>
+<ol><li><strong>P0级（停产）</strong>：先微信或电话找当天负责人，处理完再补填单子</li>
+<li><strong>P1-P3级</strong>：群内留言，技术部按排程处理，留言格式请按照<strong>示例</strong>要求</li>
+<li><strong>每天结束后</strong>：维护更新在线文档记录 陈绍禹负责</li></ol>
+<hr>
+<h2>三、值班安排</h2>
+<ul><li>初期由 <strong>张工</strong>（为主）和 <strong>许工</strong>（支援）轮流值班</li>
+<li>后期人员充足后重新排班，每周给生产部发值班表</li></ul>
+<hr>
+<h2>四、异常升级通道</h2>
+<pre><code>值班人处理 → 搞不定报张工 → 还搞不定报陈总（陈关保） → 仍搞不定找集团及供应商</code></pre>
+<ul><li>观点分歧和争议<strong>不在产线现场解决</strong>，留到每周开会讨论</li></ul>
+<hr>
+<h2>五、巡检问题处理</h2>
+<ul><li>产线巡检发现的问题记录在微信文档表格，分为 <strong>A/B/C 三级</strong></li>
+<li><strong>A级问题</strong>：马上跟冯总、陈总（陈素红）及生产主管汇报</li>
+<li>巡检问题登记表格：https://docs.qq.com/sheet/DSWFEQnBxanRIcGhE?tab=BB08J2</li>
+<li>自动化部门负责整理<strong>机台操作注意事项</strong>、<strong>设备点检表</strong>和<strong>易损件资料</strong>，并培训生产部挑选的人员</li></ul>
+<hr>
+<h2>六、设备管理</h2>
+<ul><li>新换胶枪安排人跟进稳定性</li>
+<li>4楼华氏胶结构调整要考虑装帽机构兼容性</li>
+<li>设备改造尽量小改保持原功能，可请自动化公司诊断报价</li>
+<li>二手设备注意售后服务</li></ul>
+<hr>
+<h2>七、5S管理</h2>
+<ul><li>各区域负责人员做好5S</li>
+<li>电工区域重点整改</li>
+<li>天勃设备楼层归类，非天勃设备动用需报备申请</li></ul>
+<hr>
+<h2>八、考核制度</h2>
+<ul><li>天勃建立考核制度</li>
+<li>前期报修记录、巡检记录和日报作为考核参考数据</li></ul>
+<hr>
+<h2>九、业务跟单</h2>
+<ul><li>天勃卖设备给国光，前期试用</li>
+<li>后续需指定专人跟单，要求具备商务沟通能力和设备原理知识</li></ul>
+<hr>
+<p>请大家查阅确认，有什么意见群里反馈。</p>
+<p>谢谢！</p>
+</div>
+</body>
+</html>
