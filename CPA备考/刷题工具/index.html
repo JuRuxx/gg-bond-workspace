@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA 刷题工具 · 公司战略与风险管理</title>
+<style>
+/* ========== 全局重置 ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: #F8FAFC;
+  color: #1E293B;
+  min-height: 100vh;
+}
+button { cursor: pointer; font-family: inherit; border: none; outline: none; }
+button:disabled { cursor: not-allowed; opacity: 0.5; }
+
+/* ========== 布局 ========== */
+.app { display: flex; flex-direction: column; min-height: 100vh; }
+.topbar {
+  background: #FFF; border-bottom: 1px solid #E2E8F0;
+  padding: 12px 24px; display: flex; align-items: center; gap: 16px;
+}
+.topbar .brand { font-size: 18px; font-weight: 700; color: #2563EB; }
+.topbar .btn-home { background: none; color: #64748B; font-size: 14px; padding: 6px 12px; border-radius: 6px; }
+.topbar .btn-home:hover { background: #F1F5F9; color: #1E293B; }
+.main-layout { display: flex; flex: 1; }
+.sidebar {
+  width: 160px; background: #FFF; border-right: 1px solid #E2E8F0;
+  padding: 24px 0; flex-shrink: 0;
+}
+.sidebar .nav-btn {
+  display: block; width: 100%; padding: 12px 24px; text-align: left;
+  font-size: 15px; color: #64748B; background: none; border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+.sidebar .nav-btn:hover { background: #F1F5F9; color: #1E293B; }
+.sidebar .nav-btn.active { color: #2563EB; border-left-color: #2563EB; background: #EFF6FF; font-weight: 600; }
+.content { flex: 1; padding: 32px 40px; max-width: 780px; }
+
+/* ========== 卡片 ========== */
+.card {
+  background: #FFF; border: 1px solid #E2E8F0; border-radius: 12px;
+  padding: 32px; margin-bottom: 16px;
+}
+.card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.card .card-icon { font-size: 28px; margin-bottom: 8px; }
+.card .card-title { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+.card .card-desc { color: #64748B; font-size: 14px; margin-bottom: 16px; }
+.card .card-action { color: #2563EB; font-size: 14px; font-weight: 600; }
+
+/* ========== 表单 ========== */
+select {
+  padding: 10px 16px; border: 1px solid #E2E8F0; border-radius: 8px;
+  font-size: 15px; color: #1E293B; background: #FFF; min-width: 200px;
+}
+select:focus { outline: none; border-color: #2563EB; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); }
+.btn {
+  padding: 10px 24px; border-radius: 8px; font-size: 15px; font-weight: 600;
+  transition: all 0.15s;
+}
+.btn-primary { background: #2563EB; color: #FFF; }
+.btn-primary:hover:not(:disabled) { background: #1D4ED8; }
+.btn-secondary { background: #F1F5F9; color: #1E293B; }
+.btn-secondary:hover { background: #E2E8F0; }
+.btn-danger { background: #DC2626; color: #FFF; }
+.btn-danger:hover { background: #B91C1C; }
+.btn-sm { padding: 6px 14px; font-size: 13px; border-radius: 6px; }
+
+/* ========== 章节选择页 ========== */
+.chapter-select { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+.chapter-select h2 { font-size: 22px; font-weight: 700; }
+
+/* ========== 刷题界面 ========== */
+.practice-header, .exam-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+}
+.practice-header h2, .exam-header h2 { font-size: 20px; font-weight: 700; }
+.progress-text { color: #64748B; font-size: 14px; }
+
+/* 题号栏 */
+.question-nav {
+  display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 24px; padding-bottom: 16px;
+  border-bottom: 1px solid #E2E8F0;
+}
+.q-dot {
+  width: 36px; height: 36px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 600; border: 2px solid transparent;
+  transition: all 0.15s;
+}
+.q-dot.unanswered { background: #F1F5F9; color: #94A3B8; }
+.q-dot.correct { background: #16A34A; color: #FFF; }
+.q-dot.wrong { background: #DC2626; color: #FFF; }
+.q-dot.current { border-color: #2563EB; box-shadow: 0 0 0 2px rgba(37,99,235,0.2); }
+
+/* 题目区 */
+.question-text { font-size: 16px; line-height: 1.8; margin-bottom: 24px; font-weight: 500; }
+.options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.option {
+  padding: 14px 18px; border: 2px solid #E2E8F0; border-radius: 10px;
+  font-size: 15px; cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; gap: 12px;
+}
+.option:hover { border-color: #93C5FD; background: #EFF6FF; }
+.option .opt-letter { font-weight: 700; color: #64748B; min-width: 24px; }
+.option.selected { border-color: #2563EB; background: #EFF6FF; }
+.option.correct-answer { border-color: #16A34A; background: #F0FDF4; }
+.option.wrong-answer { border-color: #DC2626; background: #FEF2F2; }
+.option.locked { cursor: default; pointer-events: none; }
+.actions { display: flex; gap: 12px; align-items: center; margin-bottom: 16px; }
+.btn-fav { font-size: 22px; background: none; padding: 4px 8px; border-radius: 6px; }
+.btn-fav:hover { background: #F1F5F9; }
+
+/* 解析区 */
+.analysis-box {
+  padding: 20px; border-radius: 10px; margin-bottom: 16px; line-height: 1.7;
+}
+.analysis-box.correct-box { background: #F0FDF4; border: 1px solid #BBF7D0; }
+.analysis-box.wrong-box { background: #FEF2F2; border: 1px solid #FECACA; }
+.analysis-box .result-label { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+
+/* 底部导航 */
+.bottom-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
+
+/* ========== 考试 ========== */
+.timer { font-size: 24px; font-weight: 700; color: #2563EB; font-variant-numeric: tabular-nums; }
+.timer.warning { color: #DC2626; animation: pulse 1s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.exam-progress { font-size: 15px; color: #64748B; }
+.btn-submit { width: 100%; margin-top: 24px; }
+
+/* ========== 成绩报告 ========== */
+.result-summary { text-align: center; margin-bottom: 24px; }
+.result-summary .score { font-size: 48px; font-weight: 800; color: #2563EB; }
+.result-summary .rate { font-size: 18px; color: #64748B; margin-top: 4px; }
+.result-summary .time-used { font-size: 14px; color: #94A3B8; margin-top: 4px; }
+.wrong-item { padding: 16px 0; border-bottom: 1px solid #E2E8F0; }
+.wrong-item:last-child { border-bottom: none; }
+.wrong-item .wrong-q { font-weight: 600; margin-bottom: 6px; }
+.wrong-item .wrong-answers { font-size: 14px; color: #64748B; margin-bottom: 4px; }
+.wrong-item .wrong-analysis { font-size: 14px; color: #1E293B; background: #F1F5F9; padding: 8px 12px; border-radius: 6px; margin-top: 4px; }
+
+/* ========== 弹窗 ========== */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center; z-index: 100;
+  animation: fadeIn 0.15s;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal {
+  background: #FFF; border-radius: 14px; padding: 28px; max-width: 420px; width: 90%;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+}
+.modal h3 { font-size: 18px; margin-bottom: 12px; }
+.modal p { color: #64748B; font-size: 14px; margin-bottom: 20px; }
+.modal .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+/* ========== 隐藏/显示 ========== */
+.page { display: none; }
+.page.active { display: block; }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- 顶栏 -->
+  <div class="topbar">
+    <span class="brand">📘 CPA 刷题</span>
+    <button class="btn-home" onclick="navigate('home')">🏠 首页</button>
+  </div>
+
+  <!-- 主体 -->
+  <div class="main-layout">
+    <!-- 左导航 -->
+    <div class="sidebar">
+      <button class="nav-btn active" data-route="home" onclick="navigate('home')">🏠 首页</button>
+      <button class="nav-btn" data-route="practice" onclick="navigate('practice')">📚 章节练习</button>
+      <button class="nav-btn" data-route="exam" onclick="navigate('exam')">📝 模拟考试</button>
+    </div>
+
+    <!-- 右内容区 -->
+    <div class="content" id="content-area"></div>
+  </div>
+</div>
+
+<!-- ========== 弹窗容器 ========== -->
+<div id="modal-container"></div>
+
+<!-- ========== 题目数据 ========== -->
+<script>
+const questions = [
+  // ===== 第一章：战略与战略管理 (3题) =====
+  { id: 1, chapter: "第一章", question: "企业使命主要回答的根本问题是：", options: ["我们如何赚钱", "我们的业务是什么", "我们的竞争对手是谁", "我们的利润目标是多少"], answer: 1, analysis: "企业使命回答的是'我们的业务是什么'这一根本问题，它定义了企业存在的目的和理由。使命陈述通常包括企业的经营哲学、核心价值观和长期愿景。" },
+  { id: 2, chapter: "第一章", question: "下列哪一项不属于公司战略的层次？", options: ["总体战略", "业务单位战略", "职能战略", "产品战略"], answer: 3, analysis: "公司战略分为三个层次：总体战略（公司层）、业务单位战略（竞争战略）和职能战略。产品战略属于职能战略下的营销战略范畴，不是独立的战略层次。" },
+  { id: 3, chapter: "第一章", question: "战略管理过程的正确顺序是：", options: ["战略分析→战略实施→战略选择", "战略分析→战略选择→战略实施", "战略选择→战略分析→战略实施", "战略实施→战略分析→战略选择"], answer: 1, analysis: "战略管理过程遵循'战略分析→战略选择→战略实施'的逻辑顺序。先分析内外部环境，再制定和选择战略方案，最后将战略付诸实施。" },
+
+  // ===== 第二章：战略分析 (5题) =====
+  { id: 4, chapter: "第二章", question: "PEST分析中的'T'指的是：", options: ["技术因素（Technology）", "时间因素（Time）", "贸易因素（Trade）", "税收因素（Tax）"], answer: 0, analysis: "PEST分析中，P代表政治和法律因素（Political），E代表经济因素（Economic），S代表社会和文化因素（Social），T代表技术因素（Technological）。" },
+  { id: 5, chapter: "第二章", question: "在波特五力模型中，供应商的议价能力强，可能是因为：", options: ["买方数量众多", "供应商集中度高，替代品少", "行业增长速度快", "转换成本低"], answer: 1, analysis: "供应商集中度高且替代品少，意味着买方选择有限，供应商议价能力自然增强。转换成本低和行业增长快反而会削弱供应商议价能力。" },
+  { id: 6, chapter: "第二章", question: "企业核心竞争力的 VRIN 标准中，'I'代表：", options: ["可模仿性（Imitability）", "不可模仿性（Inimitable）", "整合性（Integration）", "创新性（Innovation）"], answer: 1, analysis: "VRIN 模型：Valuable（有价值的）、Rare（稀缺的）、Inimitable（不可模仿的）、Non-substitutable（不可替代的）。'I'指的是不可模仿性，即竞争对手难以复制。" },
+  { id: 7, chapter: "第二章", question: "SWOT分析中，OT分析关注的是：", options: ["企业内部优势与劣势", "企业外部机会与威胁", "企业财务与运营", "企业人力资源与文化"], answer: 1, analysis: "SWOT分析中，S（Strengths）和W（Weaknesses）关注企业内部环境，O（Opportunities）和T（Threats）关注企业外部环境。" },
+  { id: 8, chapter: "第二章", question: "价值链分析中，下列哪项属于支持活动？", options: ["内部后勤", "生产作业", "技术开发", "市场营销"], answer: 2, analysis: "波特价值链将活动分为基本活动和支持活动。基本活动包括内部后勤、生产作业、外部后勤、市场营销和售后服务；支持活动包括采购管理、技术开发、人力资源管理和企业基础设施。" },
+
+  // ===== 第三章：战略选择 (5题) =====
+  { id: 9, chapter: "第三章", question: "安索夫矩阵中，'市场渗透'战略的特征是：", options: ["现有产品+新市场", "新产品+现有市场", "现有产品+现有市场", "新产品+新市场"], answer: 2, analysis: "安索夫矩阵四个象限：市场渗透（现有产品+现有市场）、市场开发（现有产品+新市场）、产品开发（新产品+现有市场）、多元化（新产品+新市场）。" },
+  { id: 10, chapter: "第三章", question: "成本领先战略的核心逻辑是：", options: ["提供独一无二的产品", "以低于竞争对手的成本提供产品", "聚焦细分市场", "通过并购扩大规模"], answer: 1, analysis: "成本领先战略旨在通过规模经济、经验曲线、严格的成本控制等手段，以低于竞争对手的成本提供产品或服务，从而获得竞争优势。" },
+  { id: 11, chapter: "第三章", question: "企业采用纵向一体化的主要动机不包括：", options: ["降低交易成本", "确保供应稳定", "提高市场响应速度", "分散经营风险"], answer: 3, analysis: "纵向一体化的动机包括降低交易成本、确保供应或销售渠道稳定、提高市场响应速度等。分散经营风险通常通过多元化战略来实现，而非纵向一体化。" },
+  { id: 12, chapter: "第三章", question: "波士顿矩阵中，'金牛产品'的特征是：", options: ["高市场增长率、高相对市场份额", "高市场增长率、低相对市场份额", "低市场增长率、高相对市场份额", "低市场增长率、低相对市场份额"], answer: 2, analysis: "金牛产品：低市场增长率、高相对市场份额，产生大量现金流。明星产品（高增长+高份额），问题产品（高增长+低份额），瘦狗产品（低增长+低份额）。" },
+  { id: 13, chapter: "第三章", question: "下列哪种并购属于横向并购？", options: ["汽车制造企业并购零部件供应商", "家电企业并购房地产公司", "两家连锁超市合并", "食品企业并购上游农场"], answer: 2, analysis: "横向并购是指同一行业内生产同类产品或提供同类服务的企业之间的并购。两家连锁超市合并属于横向并购。汽车企业并购供应商是纵向并购，跨行业并购是混合并购。" },
+
+  // ===== 第四章：战略实施 (4题) =====
+  { id: 14, chapter: "第四章", question: "组织结构跟随战略的观点由谁提出？", options: ["迈克尔·波特", "艾尔弗雷德·钱德勒", "彼得·德鲁克", "伊戈尔·安索夫"], answer: 1, analysis: "钱德勒通过研究美国大企业的发展历史，提出'结构跟随战略'（Structure follows Strategy）的著名论断，即企业战略决定其组织结构形式。" },
+  { id: 15, chapter: "第四章", question: "平衡计分卡（BSC）的四个维度不包括：", options: ["财务维度", "客户维度", "内部流程维度", "竞争对手维度"], answer: 3, analysis: "平衡计分卡四个维度：财务维度、客户维度、内部流程维度、学习与成长维度。竞争对手维度不属于 BSC 的标准维度。" },
+  { id: 16, chapter: "第四章", question: "在预算编制方法中，零基预算的特点是：", options: ["以上一年度预算为基础调整", "每个预算项目从零开始论证", "按固定比例增减", "只考虑变动成本"], answer: 1, analysis: "零基预算要求每个预算项目从零开始重新论证其必要性，不考虑历史基数。这有助于剔除不合理的支出，但编制工作量较大。" },
+  { id: 17, chapter: "第四章", question: "企业文化的三个层次由外到内依次是：", options: ["精神层→制度层→物质层", "物质层→制度层→精神层", "制度层→物质层→精神层", "物质层→精神层→制度层"], answer: 1, analysis: "企业文化由外到内分为三个层次：物质层（表层，如企业标识、环境）、制度层（中层，如规章制度、行为规范）、精神层（核心层，如价值观、经营理念）。" },
+
+  // ===== 第五章：公司治理 (3题) =====
+  { id: 18, chapter: "第五章", question: "独立董事制度的核心作用是：", options: ["提高公司日常运营效率", "保护中小股东利益、监督大股东和管理层", "替代监事会的职能", "负责公司战略制定"], answer: 1, analysis: "独立董事制度的核心目的是通过引入与公司无利益关联的外部董事，保护中小股东利益，对大股东和管理层形成有效监督和制衡。" },
+  { id: 19, chapter: "第五章", question: "委托代理问题产生的根本原因是：", options: ["信息不对称", "所有权与经营权分离", "市场竞争不充分", "监管制度缺失"], answer: 1, analysis: "委托代理问题的根源在于现代企业中所有权与经营权的分离。股东（委托人）将经营权交给管理者（代理人），两者利益不一致，产生代理成本。信息不对称加剧了这一问题，但不是根本原因。" },
+  { id: 20, chapter: "第五章", question: "下列哪项不属于公司内部治理机制？", options: ["董事会", "监事会", "外部审计", "政府监管"], answer: 3, analysis: "公司治理机制分为内部治理和外部治理。内部治理包括董事会、监事会、内部审计、激励机制等；外部治理包括政府监管、外部审计、资本市场、经理人市场等。政府监管属于外部治理机制。" },
+
+  // ===== 第六章：风险与风险管理 (4题) =====
+  { id: 21, chapter: "第六章", question: "COSO 企业风险管理框架中，风险管理的核心目标是：", options: ["消除所有风险", "将风险控制在风险容量之内", "最大化风险承担", "转移全部风险"], answer: 1, analysis: "COSO ERM 框架强调风险管理并非消除所有风险，而是将风险控制在企业可接受的风险容量（Risk Appetite）范围之内，以合理保证企业目标的实现。" },
+  { id: 22, chapter: "第六章", question: "企业购买财产保险属于哪种风险应对策略？", options: ["风险规避", "风险转移", "风险降低", "风险接受"], answer: 1, analysis: "风险应对策略包括：风险规避（退出）、风险降低（控制）、风险转移（保险、外包）、风险接受（自留）。购买保险是将风险的财务后果转移给保险公司，属于风险转移。" },
+  { id: 23, chapter: "第六章", question: "信用风险主要来源于：", options: ["利率变动", "汇率变动", "交易对手违约", "股票价格波动"], answer: 2, analysis: "信用风险（Credit Risk）是指交易对手未能履行合同义务而导致损失的风险。利率变动和汇率变动属于市场风险，股票价格波动也属于市场风险。" },
+  { id: 24, chapter: "第六章", question: "风险评估中，风险图谱（Risk Map）的横轴和纵轴通常表示：", options: ["风险发生概率和风险影响程度", "风险种类和风险来源", "控制成本和风险收益", "时间轴和损失金额"], answer: 0, analysis: "风险图谱（风险热力图）以风险发生概率为横轴、风险影响程度为纵轴，将各类风险以坐标点的形式展示，帮助管理层直观识别重大风险。" },
+
+  // ===== 第七章：内部控制 (3题) =====
+  { id: 25, chapter: "第七章", question: "我国《企业内部控制基本规范》中，内部控制的五要素不包括：", options: ["内部环境", "风险评估", "信息与沟通", "绩效考核"], answer: 3, analysis: "我国内部控制五要素：内部环境、风险评估、控制活动、信息与沟通、内部监督。绩效考核不属于五要素之一。" },
+  { id: 26, chapter: "第七章", question: "不相容职务分离原则的核心目的是：", options: ["提高工作效率", "防止舞弊和错误", "降低人力成本", "简化流程"], answer: 1, analysis: "不相容职务分离是指将授权、批准、执行、记录、保管等职责分配给不同人员，形成相互牵制，以防止或及时发现舞弊和错误。" },
+  { id: 27, chapter: "第七章", question: "内部控制中，'控制活动'的主要形式不包括：", options: ["授权审批", "财产保护", "预算控制", "战略规划"], answer: 3, analysis: "控制活动的主要形式包括：不相容职务分离、授权审批控制、会计系统控制、财产保护控制、预算控制、运营分析控制和绩效考评控制。战略规划属于企业总体管理活动，不属于具体的控制活动形式。" },
+
+  // ===== 第八章：管理信息系统 (3题) =====
+  { id: 28, chapter: "第八章", question: "ERP（企业资源计划）系统的核心特征是：", options: ["仅管理财务数据", "各业务模块独立运行", "信息高度集成与共享", "取代人工决策"], answer: 2, analysis: "ERP 系统的核心特征是各业务模块（财务、采购、生产、销售、人力资源等）高度集成，实现企业范围内信息的实时共享和流程协同。" },
+  { id: 29, chapter: "第八章", question: "决策支持系统（DSS）主要服务于：", options: ["基层操作人员", "中层管理人员", "高层战略决策者", "外部客户"], answer: 2, analysis: "决策支持系统（DSS）主要面向高层管理者和战略决策者，提供数据分析、模型模拟等功能，辅助半结构化和非结构化决策。" },
+  { id: 30, chapter: "第八章", question: "大数据分析在风险管理中的应用，不包括：", options: ["信用风险评估", "欺诈检测", "替代人工制定战略", "市场风险预警"], answer: 2, analysis: "大数据在风险管理中可用于信用评估、欺诈检测、风险预警等，但不能替代人工制定战略。战略制定需要人的判断力、经验和价值观，大数据只提供决策支持。" }
+];
+
+// ========== 应用状态 ==========
+const LS_KEY = 'cpa_quiz_app';
+let currentRoute = 'home';
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return {
+    chapterProgress: {},
+    examState: null,
+    examHistory: []
+  };
+}
+
+function saveState(s) {
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(s));
+  } catch(e) {}
+}
+
+let appState = loadState();
+
+// ========== 路由 ==========
+function navigate(route) {
+  currentRoute = route;
+  // 更新侧边栏
+  document.querySelectorAll('.nav-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.route === route);
+  });
+  // 渲染页面
+  const area = document.getElementById('content-area');
+  switch(route) {
+    case 'home': renderHome(area); break;
+    case 'practice': renderPractice(area); break;
+    case 'exam': renderExam(area); break;
+  }
+}
+
+// ========== 首页 ==========
+function renderHome(area) {
+  area.innerHTML = `
+    <h2 style="font-size:24px;font-weight:700;margin-bottom:24px;">欢迎使用 CPA 刷题工具</h2>
+    <p style="color:#64748B;margin-bottom:32px;">公司战略与风险管理 · 题库共 30 题，覆盖教材全部 8 章</p>
+    <div class="card" onclick="navigate('practice')" style="cursor:pointer;">
+      <div class="card-icon">📚</div>
+      <div class="card-title">章节练习</div>
+      <div class="card-desc">按教材章节顺序刷题，不限时，逐章攻克</div>
+      <div class="card-action">点击进入 →</div>
+    </div>
+    <div class="card" onclick="handleExamEntry()" style="cursor:pointer;">
+      <div class="card-icon">📝</div>
+      <div class="card-title">模拟考试</div>
+      <div class="card-desc">随机 30 题，限时 45 分钟，模拟真实考试</div>
+      <div class="card-action">点击进入 →</div>
+    </div>
+  `;
+}
+
+// ========== 章节练习 ==========
+let practiceState = {
+  chapter: null,
+  chapterQuestions: [],
+  currentIndex: 0,
+  selectedOption: null,
+  confirmed: false
+};
+
+function renderPractice(area) {
+  area.innerHTML = `
+    <div class="chapter-select">
+      <h2>选择练习章节</h2>
+      <select id="chapter-select">
+        <option value="">请选择章节</option>
+        <option>第一章</option>
+        <option>第二章</option>
+        <option>第三章</option>
+        <option>第四章</option>
+        <option>第五章</option>
+        <option>第六章</option>
+        <option>第七章</option>
+        <option>第八章</option>
+      </select>
+      <button class="btn btn-primary" id="btn-start-chapter" disabled onclick="startChapter()">开始练习</button>
+    </div>
+  `;
+  document.getElementById('chapter-select').addEventListener('change', function() {
+    document.getElementById('btn-start-chapter').disabled = !this.value;
+  });
+  // 重设练习状态
+  practiceState = { chapter: null, chapterQuestions: [], currentIndex: 0, selectedOption: null, confirmed: false };
+}
+
+function startChapter() {
+  const ch = document.getElementById('chapter-select').value;
+  if (!ch) return;
+  practiceState.chapter = ch;
+  practiceState.chapterQuestions = questions.filter(q => q.chapter === ch);
+  if (practiceState.chapterQuestions.length === 0) {
+    alert('该章节暂无题目');
+    return;
+  }
+  practiceState.currentIndex = 0;
+  renderPracticeQuestion(document.getElementById('content-area'));
+}
+
+function renderPracticeQuestion(area) {
+  const qs = practiceState.chapterQuestions;
+  const idx = practiceState.currentIndex;
+  const q = qs[idx];
+  const ch = practiceState.chapter;
+  const chNum = idx + 1;
+  const total = qs.length;
+
+  // 章节进度
+  if (!appState.chapterProgress[ch]) {
+    appState.chapterProgress[ch] = { answered: {}, wrong: [], favorite: [] };
+  }
+  const progress = appState.chapterProgress[ch];
+
+  // 题号栏
+  let navHtml = '<div class="question-nav">';
+  for (let i = 0; i < total; i++) {
+    let cls = 'q-dot unanswered';
+    const qid = qs[i].id;
+    if (progress.answered[qid]) {
+      cls = progress.wrong.includes(qid) ? 'q-dot wrong' : 'q-dot correct';
+    }
+    if (i === idx) cls += ' current';
+    navHtml += `<div class="${cls}">${i+1}</div>`;
+  }
+  navHtml += '</div>';
+
+  // 当前题是否已确认
+  const isAnswered = progress.answered[q.id] !== undefined;
+  const isCorrect = isAnswered && !progress.wrong.includes(q.id);
+  const isFavorite = progress.favorite.includes(q.id);
+  const savedAnswer = progress.answered[q.id];
+
+  let optionsHtml = '<div class="options">';
+  const labels = ['A', 'B', 'C', 'D'];
+  let displayAnswer = (isAnswered && savedAnswer !== undefined) ? savedAnswer : practiceState.selectedOption;
+
+  for (let i = 0; i < q.options.length; i++) {
+    let optCls = 'option';
+    if (displayAnswer === i) optCls += ' selected';
+    if (isAnswered) {
+      optCls += ' locked';
+      if (i === q.answer) optCls += ' correct-answer';
+      else if (i === savedAnswer && savedAnswer !== q.answer) optCls += ' wrong-answer';
+    }
+    optionsHtml += `
+      <div class="${optCls}" data-opt="${i}" onclick="selectPracticeOption(${i})">
+        <span class="opt-letter">${labels[i]}.</span>
+        <span>${q.options[i]}</span>
+      </div>`;
+  }
+  optionsHtml += '</div>';
+
+  // 解析区域
+  let analysisHtml = '';
+  if (isAnswered) {
+    const cls = isCorrect ? 'correct-box' : 'wrong-box';
+    const label = isCorrect ? '✅ 回答正确' : '❌ 回答错误';
+    analysisHtml = `
+      <div class="analysis-box ${cls}">
+        <div class="result-label">${label}</div>
+        <div>${q.analysis}</div>
+      </div>`;
+  }
+
+  // 按钮状态
+  const confirmDisabled = displayAnswer === null || isAnswered;
+  const prevDisabled = idx === 0;
+  const isLast = idx === total - 1;
+  const nextLabel = isLast ? '完成' : '下一题';
+
+  area.innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h2>${ch}</h2>
+      <div>
+        <button class="btn btn-sm btn-secondary" onclick="resetChapter()">🔄 重新开始</button>
+      </div>
+    </div>
+    <div class="progress-text">进度：${chNum}/${total}</div>
+    ${navHtml}
+    <div class="question-text">${q.question}</div>
+    ${optionsHtml}
+    <div class="actions">
+      <button class="btn btn-primary" id="btn-confirm" ${confirmDisabled ? 'disabled' : ''} onclick="confirmPracticeAnswer()">确认答案</button>
+      <button class="btn-fav" onclick="togglePracticeFavorite()">${isFavorite ? '⭐' : '☆'}</button>
+    </div>
+    ${analysisHtml}
+    <div class="bottom-nav">
+      <button class="btn btn-secondary" ${prevDisabled ? 'disabled' : ''} onclick="prevPracticeQuestion()">← 上一题</button>
+      <button class="btn btn-primary" onclick="nextPracticeQuestion()">${nextLabel} →</button>
+    </div>
+  `;
+}
+
+function selectPracticeOption(opt) {
+  if (practiceState.confirmed) return; // 已确认不能改
+  const q = practiceState.chapterQuestions[practiceState.currentIndex];
+  const progress = appState.chapterProgress[practiceState.chapter];
+  if (progress.answered[q.id] !== undefined) return;
+  practiceState.selectedOption = opt;
+  renderPracticeQuestion(document.getElementById('content-area'));
+}
+
+function confirmPracticeAnswer() {
+  const q = practiceState.chapterQuestions[practiceState.currentIndex];
+  const ch = practiceState.chapter;
+  const opt = practiceState.selectedOption;
+  if (opt === null) return;
+
+  const isCorrect = opt === q.answer;
+  if (!appState.chapterProgress[ch]) {
+    appState.chapterProgress[ch] = { answered: {}, wrong: [], favorite: [] };
+  }
+  appState.chapterProgress[ch].answered[q.id] = isCorrect;
+  if (!isCorrect && !appState.chapterProgress[ch].wrong.includes(q.id)) {
+    appState.chapterProgress[ch].wrong.push(q.id);
+  } else if (isCorrect && appState.chapterProgress[ch].wrong.includes(q.id)) {
+    appState.chapterProgress[ch].wrong = appState.chapterProgress[ch].wrong.filter(x => x !== q.id);
+  }
+  practiceState.confirmed = true;
+  saveState(appState);
+  renderPracticeQuestion(document.getElementById('content-area'));
+}
+
+function togglePracticeFavorite() {
+  const q = practiceState.chapterQuestions[practiceState.currentIndex];
+  const ch = practiceState.chapter;
+  if (!appState.chapterProgress[ch]) {
+    appState.chapterProgress[ch] = { answered: {}, wrong: [], favorite: [] };
+  }
+  const fav = appState.chapterProgress[ch].favorite;
+  const idx = fav.indexOf(q.id);
+  if (idx >= 0) fav.splice(idx, 1);
+  else fav.push(q.id);
+  saveState(appState);
+  renderPracticeQuestion(document.getElementById('content-area'));
+}
+
+function prevPracticeQuestion() {
+  if (practiceState.currentIndex > 0) {
+    practiceState.currentIndex--;
+    practiceState.selectedOption = null;
+    practiceState.confirmed = false;
+    renderPracticeQuestion(document.getElementById('content-area'));
+  }
+}
+
+function nextPracticeQuestion() {
+  const qs = practiceState.chapterQuestions;
+  if (practiceState.currentIndex < qs.length - 1) {
+    practiceState.currentIndex++;
+    practiceState.selectedOption = null;
+    practiceState.confirmed = false;
+    renderPracticeQuestion(document.getElementById('content-area'));
+  } else {
+    // 完成，回到选章
+    navigate('practice');
+  }
+}
+
+function resetChapter() {
+  showModal(
+    '重新开始',
+    '确定重新开始本章节？所有答题记录将清除。',
+    [
+      { text: '取消', cls: 'btn-secondary' },
+      { text: '确定', cls: 'btn-danger', action: () => {
+        const ch = practiceState.chapter;
+        appState.chapterProgress[ch] = { answered: {}, wrong: [], favorite: [] };
+        saveState(appState);
+        practiceState.currentIndex = 0;
+        practiceState.selectedOption = null;
+        practiceState.confirmed = false;
+        renderPracticeQuestion(document.getElementById('content-area'));
+      }}
+    ]
+  );
+}
+
+// ========== 模拟考试 ==========
+const EXAM_DURATION = 45 * 60; // 45 分钟
+let examTimer = null;
+let examTimeLeft = EXAM_DURATION;
+
+function handleExamEntry() {
+  if (appState.examState && !appState.examState.completed) {
+    const total = appState.examState.questionIds.length;
+    const answered = Object.keys(appState.examState.answers).length;
+    showModal(
+      '未完成的考试',
+      `你有未完成的考试（已答 ${answered}/${total} 题），是否继续？`,
+      [
+        { text: '取消', cls: 'btn-secondary' },
+        { text: '重新考试', cls: 'btn-danger', action: () => startNewExam() },
+        { text: '继续', cls: 'btn-primary', action: () => navigate('exam') }
+      ]
+    );
+  } else {
+    startNewExam();
+  }
+}
+
+function startNewExam() {
+  // 随机抽 30 题
+  const allIds = questions.map(q => q.id);
+  const shuffled = shuffleArray([...allIds]);
+  const selected = shuffled.slice(0, 30);
+  appState.examState = {
+    questionIds: selected,
+    answers: {},
+    startTime: Date.now(),
+    completed: false
+  };
+  examTimeLeft = EXAM_DURATION;
+  saveState(appState);
+  navigate('exam');
+}
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function getExamQuestionIds() {
+  if (!appState.examState || appState.examState.questionIds.length === 0) {
+    startNewExam();
+  }
+  return appState.examState.questionIds;
+}
+
+function getExamQuestion(index) {
+  const ids = getExamQuestionIds();
+  return questions.find(q => q.id === ids[index]);
+}
+
+let examStateUI = {
+  currentIndex: 0,
+  selectedOption: null
+};
+
+function renderExam(area) {
+  const ids = getExamQuestionIds();
+  const total = ids.length;
+  const idx = examStateUI.currentIndex;
+  const q = getExamQuestion(idx);
+  const answers = appState.examState.answers;
+  const answeredCount = Object.keys(answers).length;
+
+  // 检查是否已完成
+  if (appState.examState.completed) {
+    renderExamResult(area);
+    return;
+  }
+
+  // 计算剩余时间
+  const elapsed = Math.floor((Date.now() - appState.examState.startTime) / 1000);
+  examTimeLeft = Math.max(0, EXAM_DURATION - elapsed);
+  const mins = Math.floor(examTimeLeft / 60);
+  const secs = examTimeLeft % 60;
+  const timeStr = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+  const isWarning = examTimeLeft < 300; // 5 分钟警告
+
+  // 当前题的已选
+  const savedAnswer = answers[q.id];
+  const displayAnswer = (savedAnswer !== undefined) ? savedAnswer : examStateUI.selectedOption;
+
+  // 选项
+  const labels = ['A', 'B', 'C', 'D'];
+  let optionsHtml = '<div class="options">';
+  for (let i = 0; i < q.options.length; i++) {
+    let cls = 'option';
+    if (displayAnswer === i) cls += ' selected';
+    optionsHtml += `
+      <div class="${cls}" data-opt="${i}" onclick="selectExamOption(${i})">
+        <span class="opt-letter">${labels[i]}.</span>
+        <span>${q.options[i]}</span>
+      </div>`;
+  }
+  optionsHtml += '</div>';
+
+  area.innerHTML = `
+    <div class="exam-header">
+      <h2>📝 模拟考试</h2>
+      <span class="timer${isWarning ? ' warning' : ''}">⏱ ${timeStr}</span>
+      <span class="exam-progress">${answeredCount}/${total}</span>
+    </div>
+    <div class="question-text">${q.question}</div>
+    ${optionsHtml}
+    <div class="actions">
+      <button class="btn btn-primary" id="btn-exam-confirm" ${displayAnswer === null ? 'disabled' : ''} onclick="confirmExamAnswer()">确认答案</button>
+    </div>
+    <div class="bottom-nav">
+      <button class="btn btn-secondary" ${idx === 0 ? 'disabled' : ''} onclick="prevExamQuestion()">← 上一题</button>
+      <button class="btn btn-secondary" onclick="nextExamQuestion()">下一题 →</button>
+    </div>
+    <button class="btn btn-danger btn-submit" onclick="submitExam()">交卷</button>
+  `;
+
+  // 启动倒计时
+  if (examTimer) clearInterval(examTimer);
+  examTimer = setInterval(() => {
+    if (examTimeLeft <= 0) {
+      clearInterval(examTimer);
+      autoSubmitExam();
+      return;
+    }
+    examTimeLeft--;
+    const m = Math.floor(examTimeLeft / 60);
+    const s = examTimeLeft % 60;
+    const ts = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    const timerEl = area.querySelector('.timer');
+    if (timerEl) {
+      timerEl.textContent = `⏱ ${ts}`;
+      if (examTimeLeft < 300) timerEl.classList.add('warning');
+    }
+  }, 1000);
+}
+
+function selectExamOption(opt) {
+  examStateUI.selectedOption = opt;
+  renderExam(document.getElementById('content-area'));
+}
+
+function confirmExamAnswer() {
+  const q = getExamQuestion(examStateUI.currentIndex);
+  const opt = examStateUI.selectedOption;
+  if (opt === null) return;
+  appState.examState.answers[q.id] = opt;
+  saveState(appState);
+  // 检查是否全部答完
+  const ids = getExamQuestionIds();
+  const answeredCount = Object.keys(appState.examState.answers).length;
+  if (answeredCount >= ids.length) {
+    showModal(
+      '全部答完',
+      '所有题目已答完！',
+      [{ text: '确认交卷', cls: 'btn-primary', action: () => finalizeExam() }]
+    );
+    return;
+  }
+  // 不显示解析，直接渲染
+  renderExam(document.getElementById('content-area'));
+}
+
+function prevExamQuestion() {
+  if (examStateUI.currentIndex > 0) {
+    examStateUI.currentIndex--;
+    examStateUI.selectedOption = null;
+    renderExam(document.getElementById('content-area'));
+  }
+}
+
+function nextExamQuestion() {
+  const ids = getExamQuestionIds();
+  if (examStateUI.currentIndex < ids.length - 1) {
+    examStateUI.currentIndex++;
+    examStateUI.selectedOption = null;
+    renderExam(document.getElementById('content-area'));
+  }
+}
+
+function submitExam() {
+  const total = getExamQuestionIds().length;
+  const answered = Object.keys(appState.examState.answers).length;
+  const remaining = total - answered;
+  showModal(
+    '确认交卷',
+    `确定交卷？剩余 ${remaining} 题未答。未答的题将计为错误。`,
+    [
+      { text: '取消', cls: 'btn-secondary' },
+      { text: '确定交卷', cls: 'btn-danger', action: () => finalizeExam() }
+    ]
+  );
+}
+
+function autoSubmitExam() {
+  clearInterval(examTimer);
+  alert('⏰ 时间到，自动交卷');
+  finalizeExam();
+}
+
+function finalizeExam() {
+  clearInterval(examTimer);
+  appState.examState.completed = true;
+  const ids = appState.examState.questionIds;
+  const answers = appState.examState.answers;
+  let correct = 0;
+  for (const id of ids) {
+    const q = questions.find(x => x.id === id);
+    if (answers[id] === q.answer) correct++;
+  }
+  const elapsed = Math.floor((Date.now() - appState.examState.startTime) / 1000);
+  const minutes = Math.round(elapsed / 60);
+  appState.examHistory.push({
+    date: new Date().toISOString().slice(0, 10),
+    score: correct,
+    total: ids.length,
+    timeMinutes: minutes
+  });
+  saveState(appState);
+  examStateUI.currentIndex = 0;
+  examStateUI.selectedOption = null;
+  renderExamResult(document.getElementById('content-area'));
+}
+
+function renderExamResult(area) {
+  const ids = appState.examState.questionIds;
+  const answers = appState.examState.answers;
+  let correct = 0;
+  const wrongList = [];
+  for (const id of ids) {
+    const q = questions.find(x => x.id === id);
+    if (answers[id] === q.answer) {
+      correct++;
+    } else {
+      wrongList.push({ ...q, userAnswer: answers[id] });
+    }
+  }
+  const total = ids.length;
+  const rate = Math.round((correct / total) * 100);
+  const elapsed = Math.floor((Date.now() - appState.examState.startTime) / 1000);
+  const minutes = Math.round(elapsed / 60);
+
+  const labels = ['A', 'B', 'C', 'D'];
+  let wrongHtml = '';
+  if (wrongList.length === 0) {
+    wrongHtml = '<p style="color:#16A34A;font-weight:600;">🎉 全部答对，太厉害了！</p>';
+  } else {
+    wrongHtml = wrongList.map((q, i) => `
+      <div class="wrong-item">
+        <div class="wrong-q">#${i+1}. ${q.question}</div>
+        <div class="wrong-answers">
+          你的答案：${q.userAnswer !== undefined ? labels[q.userAnswer] + '. ' + q.options[q.userAnswer] : '未作答'}
+          ｜ 正确答案：${labels[q.answer]}. ${q.options[q.answer]}
+        </div>
+        <div class="wrong-analysis">${q.analysis}</div>
+      </div>
+    `).join('');
+  }
+
+  area.innerHTML = `
+    <h2 style="font-size:22px;font-weight:700;margin-bottom:24px;">考试结果</h2>
+    <div class="result-summary card">
+      <div class="score">${correct} / ${total}</div>
+      <div class="rate">正确率：${rate}%</div>
+      <div class="time-used">用时：${minutes} 分钟</div>
+    </div>
+    <div class="card">
+      <h3 style="font-size:18px;font-weight:700;margin-bottom:16px;">📋 错题回顾</h3>
+      ${wrongHtml}
+    </div>
+    <button class="btn btn-primary" style="width:100%;margin-top:16px;" onclick="navigate('home')">返回首页</button>
+  `;
+}
+
+// ========== 弹窗 ==========
+function showModal(title, message, buttons) {
+  const container = document.getElementById('modal-container');
+  const btnHtml = buttons.map(b => {
+    const action = b.action ? `onclick="document.getElementById('modal-container').innerHTML='';(${b.action.toString()})()"` : `onclick="document.getElementById('modal-container').innerHTML=''"`;
+    return `<button class="btn ${b.cls}" ${action}>${b.text}</button>`;
+  }).join('');
+  container.innerHTML = `
+    <div class="overlay">
+      <div class="modal">
+        <h3>${title}</h3>
+        <p>${message}</p>
+        <div class="modal-actions">${btnHtml}</div>
+      </div>
+    </div>
+  `;
+}
+
+// ========== 初始化 ==========
+navigate('home');
+</script>
+</body>
+</html>

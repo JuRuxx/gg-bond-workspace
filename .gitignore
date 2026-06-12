@@ -1,0 +1,27 @@
+# 隐私/个人文件
+SOUL.md
+MEMORY.md
+USER.md
+IDENTITY.md
+TOOLS.md
+HEARTBEAT.md
+RULES.md
+AGENTS.md
+
+# 临时/系统
+.DS_Store
+*.swp
+*.swo
+ghidra_temp/
+crackme2.c
+crackme2.exe
+crackme2_fixed.exe
+gg-broadcast.sh
+gg-voice-clone.sh
+gg-voice.sh
+.flow/
+
+# 工作区非CPA文件
+2026-05-21/
+2026-06-08/
+2026-06-12.md
